@@ -280,7 +280,7 @@ export class Game extends lib.flash.display.MovieClip {
     });
     TAS.saveState["laserState"] = lasers;
 
-    TAS.inputs[TAS.saveFrame][TAS.frameLength] = 0;
+    TAS.cleanExtra();
     TAS.saveFrame = TAS.frameIndex;
     TAS.inputs[TAS.saveFrame][TAS.frameLength] = 2;
     TAS.isSaved = true;

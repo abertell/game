@@ -45,6 +45,7 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
     if (modal.instances.some((i) => i.id === modalId)) {
       return;
     }
+    TAS.cleanExtra();
     TAS.inputsToString();
 
     setModalId(
@@ -72,9 +73,11 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
       <br></br>
       &nbsp;&nbsp;&nbsp;[W, A, S, D, Flow, P, K, extra]
       <br></br>
-      &nbsp;&nbsp;&nbsp;&nbsp;* extra is 2 if frame is save state,
+      &nbsp;&nbsp;&nbsp;&nbsp;* extra is 2 on save state,
       <br></br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or 3 if frame is level finish
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 on level finish,
+      <br></br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 on current frame
       <br></br>
       &nbsp;
       <br></br>

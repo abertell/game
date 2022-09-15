@@ -25,6 +25,18 @@ export class TAS {
 
     public static buffer: string = "";
 
+    public static cleanExtra() {
+        TAS.inputs.forEach((frame, i) => {
+            if (frame[TAS.frameLength] == 4) {
+                TAS.inputs[i][TAS.frameLength] = 0;
+            }
+            else if (frame[TAS.frameLength] == 2 && i !== TAS.saveFrame) {
+                TAS.inputs[i][TAS.frameLength] = 0;
+            }
+        });
+        TAS.inputs[TAS.frameIndex][TAS.frameLength] = 4;
+    }
+
     public static inputsToString() {
         let output = new Array<string>();
         TAS.inputs.forEach(function (frame) {
