@@ -1645,7 +1645,7 @@ export class Game extends lib.flash.display.MovieClip {
     }
     if (TAS.frameIndex >= TAS.inputs.length-1) {this.record();}
     else {this.playback();}
-    TAS.isSaved = false;
+    this.makeSave();
     this.updateUISign();
     this.reset();
     if (this.mode === "MP") {
