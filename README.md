@@ -54,7 +54,6 @@ The input log may be imported/exported at any time from the side panel (includin
 
 Known Issues/Inconveniences
 -----
-* Singleplayer can occasionally have inconsistent behavior between level transitions, not sure why
 * Multiplayer does not work
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
