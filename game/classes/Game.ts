@@ -613,7 +613,8 @@ export class Game extends lib.flash.display.MovieClip {
       this.fadeOut.x = 0 - this.x;
       this.fadeOut.y = 0 - this.y;
       if (TAS.recordMode || TAS.playbackMode) {
-        TAS.inputs[TAS.frameIndex-1][TAS.frameLength] = 3;
+        TAS.inputs[TAS.frameIndex][TAS.frameLength] = 3;
+        TAS.loadNextFrame();
         TAS.stopRecord();
         TAS.exitPlaybackMode();
       }
@@ -1283,14 +1284,11 @@ export class Game extends lib.flash.display.MovieClip {
     this.isPressingKill = isPressingKill;
 
     if (!this.player.rewinding) {
-      if (TAS.recordMode) {
-        Key.recordFrame();
-        TAS.loadNextFrame();
-      }
+      if (TAS.recordMode) {Key.recordFrame();}
       this.player.ping();
       this.skin.ping();
       this.logger.ping(this.skin);
-      if (!TAS.recordMode) {TAS.loadNextFrame();}
+      if (TAS.recordMode || TAS.playbackMode) {TAS.loadNextFrame();}
     }
     else{
       this.rewind();
