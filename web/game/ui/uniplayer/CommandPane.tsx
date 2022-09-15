@@ -68,31 +68,35 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
         Import/Export Inputs
       </button>
       <br></br>
-      &nbsp;&nbsp;&nbsp;Frame key order: [W, A, S, D, Flow, P, K, None]
+      &nbsp;&nbsp;&nbsp;Frame key order:
       <br></br>
-      &nbsp;&nbsp;&nbsp;Last entry is 2 if frame is the save state
+      &nbsp;&nbsp;&nbsp;[W, A, S, D, Flow, P, K, extra]
+      <br></br>
+      &nbsp;&nbsp;&nbsp;&nbsp;* extra is 2 if frame is save state,
+      <br></br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or 3 if frame is level finish
       <br></br>
       &nbsp;
       <br></br>
       &nbsp;&nbsp;&nbsp;Player Modes:
       <br></br>
-      &nbsp;&nbsp;&nbsp;Red - Recording inputs
+      &nbsp;&nbsp;&nbsp;Red - Recording Mode
       <br></br>
-      &nbsp;&nbsp;&nbsp;Green - Playing back inputs
+      &nbsp;&nbsp;&nbsp;Green - Playback Mode
       <br></br>
-      &nbsp;&nbsp;&nbsp;Blue - None
+      &nbsp;&nbsp;&nbsp;Blue - Freeplay Mode
       <br></br>
       &nbsp;
       <br></br>
       &nbsp;&nbsp;&nbsp;Key Controls:
       <br></br>
-      &nbsp;&nbsp;&nbsp;1 - Pause/play
+      &nbsp;&nbsp;&nbsp;1 - Toggle freeze/unfreeze
       <br></br>
-      &nbsp;&nbsp;&nbsp;2 - Advance by a frame
+      &nbsp;&nbsp;&nbsp;2 - Advance by 1 frame
       <br></br>
-      &nbsp;&nbsp;&nbsp;R - Start/stop recording
+      &nbsp;&nbsp;&nbsp;R - Toggle recording mode
       <br></br>
-      &nbsp;&nbsp;&nbsp;M - Make current frame the save state
+      &nbsp;&nbsp;&nbsp;M - Make save state
       <br></br>
       &nbsp;&nbsp;&nbsp;L - Load save state
     </div>
