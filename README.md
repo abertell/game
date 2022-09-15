@@ -34,7 +34,7 @@ There are also 3 in-game modes, indicated by the color of your player:
 * Default (blue) - Freeplay mode
     * This mode occurs when you reach the end of the input log. Note that entering recording mode from here will immediately start adding to the end of the input log, without accounting for any changes in position/time since the log ended.
 
-Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading. This mod currently only supports one save state at a time, and a save state is set by default at the start of every stage.
+Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading (besides freeplay). This mod currently only supports one save state at a time, and a save state is set by default at the start of every stage.
 
 On the start of each stage, the game will be in playback mode (press R to record instead) unless you are at the end of your input log, in which case it will record by default. Entering a new level, as well as switching between modes, will always freeze the game.
 
