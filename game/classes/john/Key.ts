@@ -129,15 +129,10 @@ export class Key {
   }
 
   public static recordFrame() {
-    let frame = [];
     for (let i = 0; i < TAS.frameLength; i++) {
-        if (Key.isDown(Key.keyOrder[i])) {frame.push(1);}
-        else {frame.push(0);}
+        if (Key.isDown(Key.keyOrder[i]) || (i==4 && Key.isDown(Key.SPACE))) {TAS.inputs[TAS.frameIndex][i] = 1;}
+        else {TAS.inputs[TAS.frameIndex][i] = 0;}
     }
-    let isSave = 0;
-    if (TAS.isSaved && TAS.frameIndex == TAS.saveFrame) {isSave = 2;}
-    frame.push(isSave);
-    TAS.inputs[TAS.frameIndex] = frame;
   }
 
   public static checkFrame(keyCode, frame: number): boolean {

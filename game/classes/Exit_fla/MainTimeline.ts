@@ -870,8 +870,8 @@ export class MainTimeline extends lib.flash.display.MovieClip {
     this.playerObj.jumps = Number(this.savedGame.data.saveObj.jumps);
     this.playerObj.deaths = Number(this.savedGame.data.saveObj.deaths);
     this.playerObj.gameDeaths = Number(this.savedGame.data.saveObj.gameDeaths);
-    this.playerObj.gameLevel = Number(this.savedGame.data.saveObj.gameLevel);
-    this.playerObj.gameTime = Number(this.savedGame.data.saveObj.gameTime);
+    this.playerObj.gameLevel = 0;
+    this.playerObj.gameTime = 0;
     if (this.savedGame.data.saveObj.gameName == null) {
       this.playerObj.gameName = "01234567";
     } else {

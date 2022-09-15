@@ -581,10 +581,8 @@ export class Game extends lib.flash.display.MovieClip {
     TAS.stopRecord();
     TAS.isSaved = false;
     if (this.mode === "SP") {
-      this.playerObject.gameLevel = this.levelNum;
-      if (this.levelNum != 0) {
-        this.playerObject.gameTime = this.timer.getTimeAsTotalSeconds();
-      }
+      this.playerObject.gameLevel = 0;
+      this.playerObject.gameTime = 0;
       this.dispatchEvent(new Relay(Relay.GOTO, "Game", "SinglePlayerMenu"));
     } else if (this.mode === "PRACTICE") {
       this.dispatchEvent(new Relay(Relay.GOTO, "Game", "EndPractice"));
