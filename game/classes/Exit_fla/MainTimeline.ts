@@ -867,9 +867,9 @@ export class MainTimeline extends lib.flash.display.MovieClip {
     this.playerObj.kudos = Number(this.savedGame.data.saveObj.kudos);
     this.playerObj.matches = Number(this.savedGame.data.saveObj.matches);
     this.playerObj.wins = Number(this.savedGame.data.saveObj.wins);
-    this.playerObj.jumps = Number(this.savedGame.data.saveObj.jumps);
-    this.playerObj.deaths = Number(this.savedGame.data.saveObj.deaths);
-    this.playerObj.gameDeaths = Number(this.savedGame.data.saveObj.gameDeaths);
+    this.playerObj.jumps = 0;
+    this.playerObj.deaths = 0;
+    this.playerObj.gameDeaths = 0;
     this.playerObj.gameLevel = 0;
     this.playerObj.gameTime = 0;
     if (this.savedGame.data.saveObj.gameName == null) {
@@ -878,8 +878,88 @@ export class MainTimeline extends lib.flash.display.MovieClip {
       this.playerObj.gameName = String(this.savedGame.data.saveObj.gameName);
     }
     this.playerObj.bestTime = Number(this.savedGame.data.saveObj.bestTime);
-    this.playerObj.signs = this.savedGame.data.saveObj.signs;
-    this.playerObj.achs = this.savedGame.data.saveObj.achs;
+    this.playerObj.signs = new Array<any>(
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    );
+    this.playerObj.achs = new Array<any>(
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    );
     this.playerObj.ping = 0;
     for (var j: any = 0; j < this.playerObj.achs.length; j++) {
       this.achievements[j].got = this.playerObj.achs[j];
