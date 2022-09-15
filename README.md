@@ -46,7 +46,7 @@ The input log may be imported/exported at any time (including while in-game), bu
 
 Known Issues/Inconveniences
 -----
-* Multiplayer will not work (don't bother trying)
+* Multiplayer does not work
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
 
