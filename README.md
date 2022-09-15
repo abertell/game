@@ -5,7 +5,7 @@ First-time setup
 -----
 
 1. Ensure NodeJS and yarn are installed.
-2. Download repo and navigate to directory in command line.
+2. Download/clone repository and navigate to directory in command line.
 3. Run `yarn install` in command line.
 
 Normal launch
