@@ -45,7 +45,12 @@ Finally, the input log is a list of 8-length arrays, each representing a frame w
 
 For example, the frame `[1,1,0,1,1,0,0,0]` would denote holding up, left, right, and flow at the same time.
 
-Note that the extra slot does not correspond to a key. It is equal to 2 on the frame of the most recent save state, and is equal to 3 on the frame of any level finish, which can be helpful for searching (Ctrl+F) when manually editing inputs in a text file. Note that if you overwrite the same log with many different save states/level finishes, every frame that ever had a save state/level finish will keep the extra entry, which may become confusing.
+Note that the extra slot does not correspond to a key. It is equal to:
+* 2 on the frame of the most recent save state
+* 3 on the frame of any level finish
+* 4 on the current frame
+
+These values can be helpful for searching (Ctrl+F) when manually editing inputs in a text file. Note that if you overwrite the same log with many different level finishes, every frame that ever had a level finish will keep the extra entry, which may become confusing.
 
 The input log may be imported/exported at any time from the side panel (including while in-game), but should always end with an empty frame `[0,0,0,0,0,0,0,0]`.
 
