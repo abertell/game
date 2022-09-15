@@ -1,4 +1,4 @@
-TAS EP Mod
+EP TAS Mod
 =======
 
 First-time Setup
