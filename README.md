@@ -52,5 +52,6 @@ Known Issues/Inconveniences
 * Multiplayer does not work
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
+* Practice mode doesn't have traffic lights countdown (inconsistent with real multiplayer)
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
