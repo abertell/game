@@ -17,7 +17,7 @@ Normal launch
 
 Usage
 -----
-This is a modded version of the html5 client of Exit Path, which supports TAS functionality on Singleplayer and Practice modes.
+This is a modded version of the HTML5 client of Exit Path by @kiootic, which supports TAS functionality on Singleplayer and Practice modes.
 
 There are 5 mod specific in-game key commands:
 * 1 - Toggle freeze/unfreeze of the game (different from in-game pausing)
