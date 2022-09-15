@@ -205,67 +205,68 @@ export class Game extends lib.flash.display.MovieClip {
     this.tCounterGoal = 7;
     this.finalPlacingArray = new Array<any>();
     this.playerSkins = new Array<any>();
-    this.isHeld = new Array<Boolean>(false, false, false, false, false);
+    this.isHeld = new Array<Boolean>(false, false, false, false, false, false);
     this.keyMap = new Array<any>(
       lib.flash.ui.Keyboard.NUMBER_1,
       lib.flash.ui.Keyboard.NUMBER_2,
       lib.flash.ui.Keyboard.R,
       lib.flash.ui.Keyboard.M,
-      lib.flash.ui.Keyboard.L
+      lib.flash.ui.Keyboard.L,
+      lib.flash.ui.Keyboard.B
     );
-    this.doThing = new Array<Boolean>(false, false, false, false, false);
+    this.doThing = new Array<Boolean>(false, false, false, false, false, false);
     this.inPlayback = false;
     this.frozen = false;
   }
 
-  public makeSave() {
+  public makeSave(saveTo) {
     if (!(TAS.recordMode || TAS.playbackMode)) {return;}
     if (this.player.rewinding) {return;}
-    TAS.saveState["isPaused"] = this.isPaused;
+    saveTo["isPaused"] = this.isPaused;
     //deal with camera
-    TAS.saveState["xCamX"] = this.xCamX;
-    TAS.saveState["yCamY"] = this.yCamY;
-    TAS.saveState["cameraYPos"] = this.camera.yPos;
-    TAS.saveState["cameraXPos"] = this.camera.xPos;
-    TAS.saveState["cameraCamY"] = this.camera.camY;
-    TAS.saveState["cameraCamX"] = this.camera.camX;
-    TAS.saveState["cameraTargetX"] = this.camera.target.x;
-    TAS.saveState["cameraTargetY"] = this.camera.target.y;
+    saveTo["xCamX"] = this.xCamX;
+    saveTo["yCamY"] = this.yCamY;
+    saveTo["cameraYPos"] = this.camera.yPos;
+    saveTo["cameraXPos"] = this.camera.xPos;
+    saveTo["cameraCamY"] = this.camera.camY;
+    saveTo["cameraCamX"] = this.camera.camX;
+    saveTo["cameraTargetX"] = this.camera.target.x;
+    saveTo["cameraTargetY"] = this.camera.target.y;
     //deal with player
-    TAS.saveState["playerBurningFlow"] = this.player.burningFlow;
-    TAS.saveState["playerFlowPoints"] = this.player.flowPoints;
-    TAS.saveState["playerHitHalf"] = this.player.hitHalf;
-    TAS.saveState["playerXMax"] = this.player.playerXMax;
-    TAS.saveState["playerTeleporting"] = this.player.teleporting;
-    TAS.saveState["playerXVel"] = this.player.xVel;
-    TAS.saveState["playerYVel"] = this.player.yVel;
-    TAS.saveState["playerXAcc"] = this.player.xAcc;
-    TAS.saveState["playerX"] = this.player.x;
-    TAS.saveState["playerY"] = this.player.y;
-    TAS.saveState["playerYLove"] = this.player.yLove;
-    TAS.saveState["playerJump"] = this.player.playerJump;
-    TAS.saveState["playerJumpLevel"] = this.player.jumpLevel;
-    TAS.saveState["playerStartPoint"] = this.player.curLevel.startPoint;
+    saveTo["playerBurningFlow"] = this.player.burningFlow;
+    saveTo["playerFlowPoints"] = this.player.flowPoints;
+    saveTo["playerHitHalf"] = this.player.hitHalf;
+    saveTo["playerXMax"] = this.player.playerXMax;
+    saveTo["playerTeleporting"] = this.player.teleporting;
+    saveTo["playerXVel"] = this.player.xVel;
+    saveTo["playerYVel"] = this.player.yVel;
+    saveTo["playerXAcc"] = this.player.xAcc;
+    saveTo["playerX"] = this.player.x;
+    saveTo["playerY"] = this.player.y;
+    saveTo["playerYLove"] = this.player.yLove;
+    saveTo["playerJump"] = this.player.playerJump;
+    saveTo["playerJumpLevel"] = this.player.jumpLevel;
+    saveTo["playerStartPoint"] = this.player.curLevel.startPoint;
     //deal with timer
-    TAS.saveState["timerCounter"] = this.timer.timerCounter;
+    saveTo["timerCounter"] = this.timer.timerCounter;
     //deal with obstacles
     let axes = new Array<number>();
     this.level.swingingAxes.forEach((axe) => {
       axes.push(axe.axe.currentFrame);
     });
-    TAS.saveState["axeState"] = axes;
+    saveTo["axeState"] = axes;
 
     let pspikes = new Array<number>();
     this.level.popSpikes.forEach((ps) => {
       pspikes.push(ps.inside.currentFrame);
     });
-    TAS.saveState["popSpikeState"] = pspikes;
+    saveTo["popSpikeState"] = pspikes;
 
     let fallspikes = new Array<Array<number>>();
     this.level.fallingSpikes.forEach((fs) => {
       fallspikes.push([fs.x, fs.y, fs.spikeIn.y, fs.smashState]);
     });
-    TAS.saveState["fallSpikeState"] = fallspikes;
+    saveTo["fallSpikeState"] = fallspikes;
 
     let lasers = new Array<Array<any>>();
     this.level.laserCannons.forEach((lc) => {
@@ -278,7 +279,7 @@ export class Game extends lib.flash.display.MovieClip {
         lc.beam.height
       ]);
     });
-    TAS.saveState["laserState"] = lasers;
+    saveTo["laserState"] = lasers;
 
     TAS.cleanExtra();
     TAS.saveFrame = TAS.frameIndex;
@@ -286,61 +287,61 @@ export class Game extends lib.flash.display.MovieClip {
     TAS.isSaved = true;
   }
 
-  public loadSave() {
+  public loadSave(saveTo) {
     if (!TAS.isSaved) {return;}
     if (this.player.rewinding) {this.stopRewinding();}
-    this.isPaused = TAS.saveState["isPaused"];
+    this.isPaused = saveTo["isPaused"];
     //deal with camera
-    this.xCamX = TAS.saveState["xCamX"];
-    this.yCamY = TAS.saveState["yCamY"];
-    this.camera.yPos = TAS.saveState["cameraYPos"];
-    this.camera.xPos = TAS.saveState["cameraXPos"];
-    this.camera.camY = TAS.saveState["cameraCamY"];
-    this.camera.camX = TAS.saveState["cameraCamX"];
-    this.camera.target.x = TAS.saveState["cameraTargetX"];
-    this.camera.target.y = TAS.saveState["cameraTargetY"];
+    this.xCamX = saveTo["xCamX"];
+    this.yCamY = saveTo["yCamY"];
+    this.camera.yPos = saveTo["cameraYPos"];
+    this.camera.xPos = saveTo["cameraXPos"];
+    this.camera.camY = saveTo["cameraCamY"];
+    this.camera.camX = saveTo["cameraCamX"];
+    this.camera.target.x = saveTo["cameraTargetX"];
+    this.camera.target.y = saveTo["cameraTargetY"];
     //deal with player
-    this.player.burningFlow = TAS.saveState["playerBurningFlow"];
-    this.player.flowPoints = TAS.saveState["playerFlowPoints"];
-    this.player.hitHalf = TAS.saveState["playerHitHalf"];
-    this.player.playerXMax = TAS.saveState["playerXMax"];
-    this.player.teleporting = TAS.saveState["playerTeleporting"];
-    this.player.xVel = TAS.saveState["playerXVel"];
-    this.player.yVel = TAS.saveState["playerYVel"];
-    this.player.xAcc = TAS.saveState["playerXAcc"];
-    this.player.x = TAS.saveState["playerX"];
-    this.player.y = TAS.saveState["playerY"];
-    this.player.yLove = TAS.saveState["playerYLove"];
-    this.player.playerJump = TAS.saveState["playerJump"];
-    this.player.jumpLevel = TAS.saveState["playerJumpLevel"];
-    this.player.curLevel.startPoint = TAS.saveState["playerStartPoint"];
+    this.player.burningFlow = saveTo["playerBurningFlow"];
+    this.player.flowPoints = saveTo["playerFlowPoints"];
+    this.player.hitHalf = saveTo["playerHitHalf"];
+    this.player.playerXMax = saveTo["playerXMax"];
+    this.player.teleporting = saveTo["playerTeleporting"];
+    this.player.xVel = saveTo["playerXVel"];
+    this.player.yVel = saveTo["playerYVel"];
+    this.player.xAcc = saveTo["playerXAcc"];
+    this.player.x = saveTo["playerX"];
+    this.player.y = saveTo["playerY"];
+    this.player.yLove = saveTo["playerYLove"];
+    this.player.playerJump = saveTo["playerJump"];
+    this.player.jumpLevel = saveTo["playerJumpLevel"];
+    this.player.curLevel.startPoint = saveTo["playerStartPoint"];
     this.skin.ping();
     //deal with timer
-    this.timer.timerCounter = TAS.saveState["timerCounter"];
+    this.timer.timerCounter = saveTo["timerCounter"];
     this.uiPanel.timeDisp.text = this.timer.getTimeAsString();
     //deal with obstacles
     this.level.swingingAxes.forEach((axe, i) => {
-      axe.axe.gotoAndStop(TAS.saveState["axeState"][i]);
+      axe.axe.gotoAndStop(saveTo["axeState"][i]);
     });
 
     this.level.popSpikes.forEach((ps, i) => {
-      ps.inside.gotoAndStop(TAS.saveState["popSpikeState"][i]);
+      ps.inside.gotoAndStop(saveTo["popSpikeState"][i]);
     });
 
     this.level.fallingSpikes.forEach((fs, i) => {
-      fs.x = TAS.saveState["fallSpikeState"][i][0];
-      fs.y = TAS.saveState["fallSpikeState"][i][1];
-      fs.spikeIn.y = TAS.saveState["fallSpikeState"][i][2];
-      fs.smashState = TAS.saveState["fallSpikeState"][i][3];
+      fs.x = saveTo["fallSpikeState"][i][0];
+      fs.y = saveTo["fallSpikeState"][i][1];
+      fs.spikeIn.y = saveTo["fallSpikeState"][i][2];
+      fs.smashState = saveTo["fallSpikeState"][i][3];
     });
 
     this.level.laserCannons.forEach((lc, i) => {
-      lc.rotation = TAS.saveState["laserState"][i][0];
-      lc.setAngle = TAS.saveState["laserState"][i][1];
-      lc.fakeAngle = TAS.saveState["laserState"][i][2];
-      lc.timeOut = TAS.saveState["laserState"][i][3];
-      lc.beam.visible = TAS.saveState["laserState"][i][4];
-      lc.beam.height = TAS.saveState["laserState"][i][5];
+      lc.rotation = saveTo["laserState"][i][0];
+      lc.setAngle = saveTo["laserState"][i][1];
+      lc.fakeAngle = saveTo["laserState"][i][2];
+      lc.timeOut = saveTo["laserState"][i][3];
+      lc.beam.visible = saveTo["laserState"][i][4];
+      lc.beam.height = saveTo["laserState"][i][5];
     });
 
     this.uiPanel.ping(this.camera, this.player);
@@ -1238,13 +1239,18 @@ export class Game extends lib.flash.display.MovieClip {
     }
 
     if (this.doThing[3]) {
-      this.makeSave();
+      this.makeSave(TAS.saveState);
       this.doThing[3] = false;
     }
 
     if (this.doThing[4]) {
-      this.loadSave();
+      this.loadSave(TAS.saveState);
       this.doThing[4] = false;
+    }
+
+    if (this.doThing[5]) {
+      this.loadSave(TAS.saveStart);
+      this.doThing[5] = false;
     }
 
     if (this.inPlayback && !TAS.playbackMode) {
@@ -1644,7 +1650,8 @@ export class Game extends lib.flash.display.MovieClip {
     }
     if (TAS.frameIndex >= TAS.inputs.length-1) {this.record();}
     else {this.playback();}
-    this.makeSave();
+    this.makeSave(TAS.saveStart);
+    this.freezeObstacles();
     this.updateUISign();
     this.reset();
     if (this.mode === "MP") {

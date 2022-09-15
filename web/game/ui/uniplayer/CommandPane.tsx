@@ -102,6 +102,8 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
       &nbsp;&nbsp;&nbsp;M - Make save state
       <br></br>
       &nbsp;&nbsp;&nbsp;L - Load save state
+      <br></br>
+      &nbsp;&nbsp;&nbsp;B - Load level start
     </div>
   );
 });

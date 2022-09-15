@@ -17,11 +17,13 @@ export class TAS {
 
     public static saveState = new Object();
 
+    public static saveStart = new Object();
+
     public static isSaved = false;
 
     public static saveFrame: number = 0;
 
-    public static inputs = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]];
+    public static inputs = [[0,0,0,0,0,0,0,0]];
 
     public static buffer: string = "";
 
