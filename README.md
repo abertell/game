@@ -26,6 +26,8 @@ There are 5 mod specific in-game key commands:
 * M - Make save state
 * L - Load save state
 
+Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading.
+
 This mod currently only supports one save state at a time, and save states are not remembered between stages (i.e. you cannot go back to a previous Singleplayer level without replaying from level 1, so it is best to optimize each level in order). Exiting the game will always reset you to Singleplayer level 1, to avoid confusion/inconsistent behavior.
 
 There are also 3 in-game modes, indicated by the color of your player:
