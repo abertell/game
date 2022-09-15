@@ -1,11 +1,11 @@
 EP TAS Mod
 =======
 
-First-time Setup
+First-time setup
 -----
 
-1. Ensure NodeJS and yarn is installed.
-2. Download repo and navigate to directory in command line.
+1. Ensure NodeJS and yarn are installed.
+2. Download/clone repository and navigate to directory in command line.
 3. Run `yarn install` in command line.
 
 Normal launch
@@ -52,5 +52,6 @@ Known Issues/Inconveniences
 * Multiplayer does not work
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
+* Practice mode doesn't have traffic lights countdown (inconsistent with real multiplayer)
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
