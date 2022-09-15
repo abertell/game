@@ -376,6 +376,13 @@ export class Game extends lib.flash.display.MovieClip {
     this.skin.ping();
   }
 
+  public record() {
+    this.inPlayback = false;
+    TAS.primeRecord();
+    this.skin.colour = 16711680;
+    this.skin.ping();
+  }
+
   public added(e: lib.flash.events.Event): any {
     this.stage.focus = this.stage;
   }
@@ -1219,10 +1226,7 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.doThing[2]) {
       if (!TAS.recordMode) {
         if (TAS.isPlaying) {TAS.stopPlaying();}
-        TAS.primeRecord();
-        this.inPlayback = false;
-        this.skin.colour = 16711680;
-        this.skin.ping();
+        this.record();
       }
       else {
         TAS.stopRecord();
@@ -1242,6 +1246,7 @@ export class Game extends lib.flash.display.MovieClip {
     }
 
     if (this.inPlayback && !TAS.playbackMode) {
+      this.inPlayback = false;
       this.skin.colour = this.player.colour;
       this.skin.ping();
     }
@@ -1250,13 +1255,17 @@ export class Game extends lib.flash.display.MovieClip {
       if (!this.frozen) {
         this.freezeObstacles();
       }
+      if (this.levelNum != 30) {
+        this.uiPanel.timeDisp.text = this.timer.getTimeAsString();
+      } else {
+        this.uiPanel.timeDisp.text = " ";
+      }
+      this.level.timeString = this.timer.getTimeAsString();
+      this.uiPanel.ping(this.camera, this.player);
       return;
     }
-    else {
-      if (this.frozen) {
-        this.unfreezeObstacles();
-      }
-    }
+
+    if (this.frozen) {this.unfreezeObstacles();}
 
     if (Key.isDown(lib.flash.ui.Keyboard.P)) {this.pauseOut();}
 
@@ -1303,6 +1312,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.uiPanel.timeDisp.text = " ";
     }
     this.level.timeString = this.timer.getTimeAsString();
+    
     if (this.levelNum == 30) {
       this.setRank();
     }
@@ -1633,7 +1643,8 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.mode === "PRACTICE" || this.levelNum == 0) {
       TAS.setFrame(0);
     }
-    this.playback();
+    if (TAS.frameIndex >= TAS.inputs.length-1) {this.record();}
+    else {this.playback();}
     TAS.isSaved = false;
     this.updateUISign();
     this.reset();
