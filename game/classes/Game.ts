@@ -607,8 +607,11 @@ export class Game extends lib.flash.display.MovieClip {
       this.addChild(this.fadeOut);
       this.fadeOut.x = 0 - this.x;
       this.fadeOut.y = 0 - this.y;
-      TAS.stopRecord();
-      TAS.exitPlaybackMode();
+      if (TAS.recordMode || TAS.playbackMode) {
+        TAS.inputs[TAS.frameIndex-1][TAS.frameLength] = 3;
+        TAS.stopRecord();
+        TAS.exitPlaybackMode();
+      }
     } else if (this.mode === "MP") {
       this.uiPanel.arrowKeysToPan.gotoAndStop(2);
       this.xCamX = this.player.x;
@@ -1273,11 +1276,14 @@ export class Game extends lib.flash.display.MovieClip {
     this.isPressingKill = isPressingKill;
 
     if (!this.player.rewinding) {
-      if (TAS.recordMode) {Key.recordFrame();}
-      TAS.loadNextFrame();
+      if (TAS.recordMode) {
+        Key.recordFrame();
+        TAS.loadNextFrame();
+      }
       this.player.ping();
       this.skin.ping();
       this.logger.ping(this.skin);
+      if (!TAS.recordMode) {TAS.loadNextFrame();}
     }
     else{
       this.rewind();
