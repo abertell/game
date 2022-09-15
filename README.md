@@ -36,7 +36,7 @@ There are also 3 in-game modes, indicated by the color of your player:
 * Default (blue) - Freeplay mode
     * This mode occurs when you reach the end of the input log. Note that entering recording mode from this mode is not recommended, as it will start adding immediately to the end of the input log, without accounting for any changes in position/time since the log ended.
 
-On the start of each stage, the game will be frozen (press 1 to unfreeze) and in playback mode (press R to record instead).
+On the start of each stage, the game will be in playback mode (press R to record instead) and frozen (press 1 to unfreeze). Switching between modes will always freeze the game.
 
 Finally, the input log is a list of 8-length arrays, representing the following key inputs, in order: `W, A, S, D, Flow, P(ause), K(ill), extra`
 
