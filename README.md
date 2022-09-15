@@ -19,12 +19,13 @@ Usage
 -----
 This is a modded version of the HTML5 client of Exit Path by @kiootic, which supports TAS functionality on Singleplayer and Practice modes.
 
-There are 5 mod specific in-game key commands:
+There are 6 mod specific in-game key commands:
 * 1 - Toggle freeze/unfreeze of the game (different from in-game pausing)
 * 2 - Advance game by one frame while frozen
 * R - Toggle recording mode
 * M - Make save state
 * L - Load save state
+* B - Restart level
 
 There are also 3 in-game modes, indicated by the color of your player:
 * Red - Recording mode
@@ -34,7 +35,7 @@ There are also 3 in-game modes, indicated by the color of your player:
 * Default (blue) - Freeplay mode
     * This mode occurs when you reach the end of the input log. Note that entering recording mode from here will immediately start adding to the end of the input log, without accounting for any changes in position/time since the log ended.
 
-Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading (besides freeplay). This mod currently only supports one save state at a time, and a save state is set by default at the start of every stage.
+Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading (besides freeplay). This mod currently only supports one most recent save state, plus a default save state at the start of every stage (via B key).
 
 On the start of each stage, the game will be in playback mode (press R to record instead) unless you are at the end of your input log, in which case it will record by default. Entering a new level, as well as switching between modes, will always freeze the game.
 
