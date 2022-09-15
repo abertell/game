@@ -52,7 +52,7 @@ Note that the extra slot does not correspond to a key. It is equal to:
 
 These values can be helpful for searching (Ctrl+F) when manually editing inputs in a text file. Note that if you overwrite the same log with many different level finishes, every frame that ever had a level finish will keep the extra entry, which may become confusing.
 
-The input log may be imported/exported at any time from the side panel (including while in-game), but should always end with an empty frame `[0,0,0,0,0,0,0,0]` (this frame will be overwritten as soon as you start recording).
+The input log may be imported/exported at any time from the side panel (including while in-game), but should always end with an empty frame `[0,0,0,0,0,0,0,0]` (not doing this won't break anything, but this frame will be overwritten as soon as you start recording).
 
 Known Issues/Inconveniences
 -----
