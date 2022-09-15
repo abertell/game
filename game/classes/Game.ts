@@ -345,8 +345,7 @@ export class Game extends lib.flash.display.MovieClip {
 
     this.uiPanel.ping(this.camera, this.player);
     TAS.frameIndex = TAS.saveFrame;
-    TAS.stopRecord();
-    this.playback();
+    TAS.stopPlaying();
     this.frozen = true;
   }
 
