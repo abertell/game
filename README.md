@@ -21,7 +21,7 @@ This is a modded version of the html5 client of Exit Path, which supports TAS fu
 
 There are 5 mod specific in-game key commands:
 * 1 - Toggle freeze/unfreeze of the game (different from in-game pausing)
-* 2 - Advance game by one frame
+* 2 - Advance game by one frame while frozen
 * R - Toggle recording mode
 * M - Make save state
 * L - Load save state
@@ -36,15 +36,17 @@ There are also 3 in-game modes, indicated by the color of your player:
 * Default (blue) - Freeplay mode
     * This mode occurs when you reach the end of the input log. Note that entering recording mode from this mode is not recommended, as it will start adding immediately to the end of the input log, without accounting for any changes in position/time since the log ended.
 
-On the start of each stage, the game will be frozen (press 1 to unfreeze) and in playback mode (press R to record instead).
+On the start of each stage, the game will be in playback mode (press R to record instead) and frozen (press 1 to unfreeze). Switching between modes will always freeze the game.
 
 Finally, the input log is a list of 8-length arrays, representing the following key inputs, in order: `W, A, S, D, Flow, P(ause), K(ill), extra`
 
-Note that the extra slot does not correspond to a key. It is equal to 2 on the frame of the most recent save state, and is equal to 3 on the frame of any level finish, which can be helpful for manual input editing in a text file. The input log may be imported/exported at any time, but should always end with an empty frame `[0,0,0,0,0,0,0,0]`.
+Note that the extra slot does not correspond to a key. It is equal to 2 on the frame of the most recent save state, and is equal to 3 on the frame of any level finish, which can be helpful for searching (Ctrl+F) when manually editing inputs in a text file. Note that if you overwrite the same log with many different level finishes, every frame that ever had a level finish will keep the 3 entry, which may become confusing.
+
+The input log may be imported/exported at any time (including while in-game), but should always end with an empty frame `[0,0,0,0,0,0,0,0]`.
 
 Known Issues/Inconveniences
 -----
-* Multiplayer will not work (don't bother trying)
+* Multiplayer does not work
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
 
