@@ -7,7 +7,8 @@ type ModalInstanceProps =
   | ModalSelectLevelProps
   | ModalConnectMultiplayerProps
   | ModalRoomSelectionProps
-  | ModalWhatsNewProps;
+  | ModalWhatsNewProps
+  | ModalImportCodeProps;
 
 type ModalSelectLevelProps = {
   type: "select-level";
@@ -27,6 +28,11 @@ type ModalWhatsNewProps = {
   type: "whats-new";
   newVersions: Record<string, string[]>;
 };
+
+type ModalImportCodeProps = {
+  type: "import-code";
+  onEnterCode: (code: string) => void;
+}
 
 export class ModalStore {
   nextInstanceId = 1;

@@ -38,7 +38,7 @@ export class Level1 extends Level {
       if (this.player.hitTestObject(this.turnstile)) {
         this.touching = true;
         this.turnstile.play();
-        this.sign.TICKERAB.changeString("^^^^^^^^");
+        this.sign.TICKERAB.changeString("MOLG_TAS");
         this.player.parent["setPlayerName"](this.sign.TICKERAB.word);
       }
     } else if (!this.player.hitTestObject(this.turnstile)) {

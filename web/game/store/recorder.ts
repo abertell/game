@@ -1,5 +1,6 @@
 import { action, autorun, makeAutoObservable } from "mobx";
 import lib from "swf-lib";
+import { Player } from "../../../game/classes";
 import { Relay } from "../../../game/classes/john";
 import { Key } from "../../../game/classes/john/Key";
 import type { RootStore } from "./root";
@@ -103,6 +104,7 @@ export class RecorderStore {
   }
 
   private exitFrame = action(() => {
+    if (this.root.game.isPaused) {return;}
     switch (this._mode) {
       case "recording": {
         const shift =

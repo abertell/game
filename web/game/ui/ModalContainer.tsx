@@ -7,6 +7,7 @@ import { ConnectMultiplayer } from "./modals/ConnectMultiplayer";
 import { RoomSelection } from "./modals/RoomSelection";
 import { SelectLevel } from "./modals/SelectLevel";
 import { WhatsNew } from "./modals/WhatsNew";
+import { ImportCode } from "./modals/ImportCode";
 import styles from "./ModalContainer.module.scss";
 
 interface Props {
@@ -61,6 +62,15 @@ const Instance = observer<InstanceProps>(function Instance(props) {
           className={styles.dialog}
           modalId={props.modal.id}
           newVersions={props.modal.newVersions}
+        />
+      );
+      break;
+    case "import-code":
+      children = (
+        <ImportCode
+          className={styles.dialog}
+          modalId={props.modal.id}
+          onEnterCode={props.modal.onEnterCode}
         />
       );
       break;

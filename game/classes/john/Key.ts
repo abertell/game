@@ -1,4 +1,5 @@
 import lib from "swf-lib";
+import { TAS } from "./TAS";
 
 export class Key {
   public static A: number = 65;
@@ -50,6 +51,8 @@ export class Key {
 
   private static initialized: boolean = false;
 
+  public static K: number = 75;
+
   public static keysDown: any = new Object();
 
   public static LEFT: string = "left";
@@ -74,7 +77,11 @@ export class Key {
 
   public static SEVEN: number = 55;
 
+  public static SHIFT: number = 16;
+
   public static SIX: number = 54;
+
+  public static SPACE: number = 32;
 
   public static THREE: number = 51;
 
@@ -89,6 +96,10 @@ export class Key {
   public static WASD: string = "wasd";
 
   public static ZERO: number = 48;
+
+  public static keyMap = new Object();
+
+  public static keyOrder = [Key.UP, Key.LEFT, Key.DOWN, Key.RIGHT, Key.SHIFT, Key.K, Key.P];
 
   public constructor() {}
 
@@ -107,12 +118,38 @@ export class Key {
       Key.keyReleased
     );
     stage.addEventListener(lib.flash.events.Event.DEACTIVATE, Key.clearKeys);
+    Key.keyMap[Key.UP] = 64;
+    Key.keyMap[Key.LEFT] = 32;
+    Key.keyMap[Key.DOWN] = 16;
+    Key.keyMap[Key.RIGHT] = 8;
+    Key.keyMap[Key.SHIFT] = 4;
+    Key.keyMap[Key.K] = 2;
+    Key.keyMap[Key.P] = 1;
     Key.initialized = true;
+  }
+
+  public static recordFrame() {
+    let frame = [];
+    for (let i = 0; i < TAS.frameLength; i++) {
+        if (Key.isDown(Key.keyOrder[i])) {frame.push(1);}
+        else {frame.push(0);}
+    }
+    let isSave = 0;
+    if (TAS.isSaved && TAS.frameIndex == TAS.saveFrame) {isSave = 2;}
+    frame.push(isSave);
+    TAS.inputs[TAS.frameIndex] = frame;
+  }
+
+  public static checkFrame(keyCode, frame: number): boolean {
+    return Boolean((Key.keyMap[keyCode] & frame) > 0);
   }
 
   public static isDown(keyCode: any): boolean {
     if (!Key.initialized) {
       throw new Error("Key class has yet been initialized.");
+    }
+    if (TAS.playbackMode && keyCode in Key.keyMap) {
+      return Key.checkFrame(keyCode, TAS.getFrame());
     }
     if (typeof keyCode == "number") {
       return Boolean(keyCode in Key.keysDown);

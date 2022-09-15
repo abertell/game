@@ -110,7 +110,8 @@ export class Level extends lib.flash.display.MovieClip {
     this.levelName = "Multiplayer";
     this.obstacleColour = 13421772;
     this.createdArray = false;
-    this.levelColour = 3355443;
+    //this.levelColour = 3355443;
+    this.levelColour = 10944767;
     this.lastX = 0;
     this.lastY = 0;
     this.checkPointID = 0;
@@ -276,11 +277,11 @@ export class Level extends lib.flash.display.MovieClip {
     const pendingTiles: Tile[] = [];
     for (const [holder, tileType] of this.toPush) {
       let tile: Tile;
-      if (this.levelType == "SP") {
-        tile = new Tile();
-      } else {
-        tile = new TileOpaque();
-      }
+      //if (this.levelType == "SP") {
+      tile = new Tile();
+      //} else {
+      //  tile = new TileOpaque();
+      //}
 
       if (holder.rotation % 90 === 0 && holder.rotation !== 0) {
         holder.addChild(tile);
@@ -313,9 +314,9 @@ export class Level extends lib.flash.display.MovieClip {
 
       pendingTiles.push(tile);
       if (tileType != 4) {
-        if (this.levelType == "SP") {
-          Anim.colourMe(tile, this.levelColour);
-        }
+        //if (this.levelType == "SP") {
+        Anim.colourMe(tile, this.levelColour);
+        //}
       }
       switch (tileType) {
         case 1:

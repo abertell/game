@@ -6,7 +6,6 @@ import { Level } from "./Level";
 import { Emit } from "./john/Emit";
 import { EndCountdown } from "./EndCountdown";
 import { FadeOut } from "./FadeOut";
-import { FreedomSequence } from "./FreedomSequence";
 import { Ghosting } from "./Ghosting";
 import { LevelEnd } from "./LevelEnd";
 import { LevelStart } from "./LevelStart";
@@ -29,6 +28,7 @@ import { Anim } from "./john/Anim";
 import { PlayerBar } from "./PlayerBar";
 import { Relay } from "./john/Relay";
 import { Key } from "./john/Key";
+import { TAS } from "./john/TAS";
 import { Math2 } from "./john/Math2";
 import { WhiteSquare } from "./WhiteSquare";
 import { YouArrow } from "./YouArrow";
@@ -47,25 +47,12 @@ import { StadiumB } from "./StadiumB";
 import { PlayerShell } from "./PlayerShell";
 import { PlayerObject } from "./PlayerObject";
 import { LevelFlags } from "../../shared/level";
+import { ExternalEvent } from "./ExternalEvent";
 
 export class Game extends lib.flash.display.MovieClip {
   public declare bg: BitmapCanvas;
 
-  public declare buildStr: string;
-
   private declare camera: HandyCam;
-
-  public declare cDown: boolean;
-
-  public declare checkPoints: any[];
-
-  public declare cheerCounter: number;
-
-  public declare cLeft: boolean;
-
-  public declare cRight: boolean;
-
-  public declare cUp: boolean;
 
   private declare curLevel: Level;
 
@@ -83,15 +70,11 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare firstSoundPlay: boolean;
 
-  public declare freedomSequence: FreedomSequence;
-
   private declare ghosting: Ghosting;
 
   public declare goAhead: boolean;
 
   public declare isPaused: boolean;
-
-  public declare keysPressed: any[];
 
   public declare level: Level;
 
@@ -111,8 +94,6 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare mpLevel: number;
 
-  private declare placingBonuses: any[];
-
   public declare player: Player;
 
   public declare playerBars: PlayerBar[];
@@ -124,8 +105,6 @@ export class Game extends lib.flash.display.MovieClip {
   public declare playerSkins: Runner[];
 
   public declare rewindCounter: number;
-
-  public declare robots: any[];
 
   public declare sBackward: lib.flash.media.Sound;
 
@@ -151,8 +130,6 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare soundRatio: number;
 
-  private declare spaceDown: boolean;
-
   private declare static: Static;
 
   public declare tConnected: boolean;
@@ -163,8 +140,6 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare tempShape: lib.flash.display.Shape;
 
-  public declare timeCounter: number;
-
   public declare timer: StopWatch;
 
   private declare tryFrame: number;
@@ -173,17 +148,21 @@ export class Game extends lib.flash.display.MovieClip {
 
   private declare uiPanel: UIPanel;
 
-  public declare updateMethod: number;
-
-  public declare updateRate: number;
-
-  public declare updaters: any[];
-
   public declare xCamX: number;
 
   public declare yCamY: number;
 
   public declare youArrows: any[];
+  
+  public declare keyMap;
+
+  public declare isHeld;
+
+  public declare doThing;
+
+  public declare inPlayback;
+
+  public declare frozen;
 
   private isPressingKill = false;
 
@@ -191,56 +170,211 @@ export class Game extends lib.flash.display.MovieClip {
     super();
     this.xCamX = 375;
     this.yCamY = 375;
-    this.updateMethod = 0;
-    this.cLeft = false;
     this.fastSound = false;
     this.tCounter = 0;
     this.levelFinished = false;
     this.firstSoundPlay = true;
-    this.cUp = false;
-    this.updateRate = 7;
     this.mode = "PRACTICE";
     this.songPlaying = "none";
     this.levelNum = 0;
     this.tryFrame = 0;
     this.deathScreens = 0;
-    this.cRight = false;
     this.level30Okay = false;
-    this.timeCounter = 0;
     this.mpLevel = 100;
-    this.cDown = false;
     this.goAhead = false;
     this.rewindCounter = 0;
-    this.spaceDown = false;
-    this.buildStr = "0.2.3";
-    this.cheerCounter = 0;
     this.isPaused = false;
     this.tConnected = false;
     this.camera = new HandyCam();
     this.logger = new Logger();
     this.ghosting = new Ghosting();
-    this.placingBonuses = new Array<any>(250, 150, 100, 50);
     this.bg = new BitmapCanvas();
     this.skinLayer = new lib.flash.display.MovieClip();
     this.morgue = new Morgue();
     this.uiPanel = new UIPanel();
     this.timer = new StopWatch();
     this.emit = new Emit();
-    this.robots = new Array<any>();
     this.tempShape = new lib.flash.display.Shape();
     this.playerBars = new Array<any>();
-    this.checkPoints = new Array<any>();
     this.youArrows = new Array<any>();
     this.skyLine = new SkyLine();
     this.sForward = new InsideA();
     this.sBackward = new InsideC();
     this.sFast = new InsideB();
     this.players = new Array<any>();
-    this.tCounterGoal = this.updateRate;
-    this.keysPressed = new Array<any>(false, false, false, false);
-    this.updaters = new Array<any>(0, 0, 0, 0, 0, 0, 0, 0);
+    this.tCounterGoal = 7;
     this.finalPlacingArray = new Array<any>();
     this.playerSkins = new Array<any>();
+    this.isHeld = new Array<Boolean>(false, false, false, false, false);
+    this.keyMap = new Array<any>(
+      lib.flash.ui.Keyboard.NUMBER_1,
+      lib.flash.ui.Keyboard.NUMBER_2,
+      lib.flash.ui.Keyboard.R,
+      lib.flash.ui.Keyboard.M,
+      lib.flash.ui.Keyboard.L
+    );
+    this.doThing = new Array<Boolean>(false, false, false, false, false);
+    this.inPlayback = false;
+    this.frozen = false;
+  }
+
+  public makeSave() {
+    if (!(TAS.recordMode || TAS.playbackMode)) {return;}
+    if (this.player.rewinding) {return;}
+    TAS.saveState["isPaused"] = this.isPaused;
+    //deal with camera
+    TAS.saveState["xCamX"] = this.xCamX;
+    TAS.saveState["yCamY"] = this.yCamY;
+    TAS.saveState["cameraYPos"] = this.camera.yPos;
+    TAS.saveState["cameraXPos"] = this.camera.xPos;
+    TAS.saveState["cameraCamY"] = this.camera.camY;
+    TAS.saveState["cameraCamX"] = this.camera.camX;
+    TAS.saveState["cameraTargetX"] = this.camera.target.x;
+    TAS.saveState["cameraTargetY"] = this.camera.target.y;
+    //deal with player
+    TAS.saveState["playerBurningFlow"] = this.player.burningFlow;
+    TAS.saveState["playerFlowPoints"] = this.player.flowPoints;
+    TAS.saveState["playerHitHalf"] = this.player.hitHalf;
+    TAS.saveState["playerXMax"] = this.player.playerXMax;
+    TAS.saveState["playerTeleporting"] = this.player.teleporting;
+    TAS.saveState["playerXVel"] = this.player.xVel;
+    TAS.saveState["playerYVel"] = this.player.yVel;
+    TAS.saveState["playerXAcc"] = this.player.xAcc;
+    TAS.saveState["playerX"] = this.player.x;
+    TAS.saveState["playerY"] = this.player.y;
+    TAS.saveState["playerYLove"] = this.player.yLove;
+    TAS.saveState["playerJump"] = this.player.playerJump;
+    TAS.saveState["playerJumpLevel"] = this.player.jumpLevel;
+    TAS.saveState["playerStartPoint"] = this.player.curLevel.startPoint;
+    //deal with timer
+    TAS.saveState["timerCounter"] = this.timer.timerCounter;
+    //deal with obstacles
+    let axes = new Array<number>();
+    this.level.swingingAxes.forEach((axe) => {
+      axes.push(axe.axe.currentFrame);
+    });
+    TAS.saveState["axeState"] = axes;
+
+    let pspikes = new Array<number>();
+    this.level.popSpikes.forEach((ps) => {
+      pspikes.push(ps.inside.currentFrame);
+    });
+    TAS.saveState["popSpikeState"] = pspikes;
+
+    let fallspikes = new Array<Array<number>>();
+    this.level.fallingSpikes.forEach((fs) => {
+      fallspikes.push([fs.x, fs.y, fs.spikeIn.y, fs.smashState]);
+    });
+    TAS.saveState["fallSpikeState"] = fallspikes;
+
+    let lasers = new Array<Array<any>>();
+    this.level.laserCannons.forEach((lc) => {
+      lasers.push([
+        lc.rotation,
+        lc.setAngle,
+        lc.fakeAngle,
+        lc.timeOut,
+        lc.beam.visible,
+        lc.beam.height
+      ]);
+    });
+    TAS.saveState["laserState"] = lasers;
+
+    TAS.inputs[TAS.saveFrame][TAS.frameLength] = 0;
+    TAS.saveFrame = TAS.frameIndex;
+    TAS.inputs[TAS.saveFrame][TAS.frameLength] = 2;
+    TAS.isSaved = true;
+  }
+
+  public loadSave() {
+    if (!TAS.isSaved) {return;}
+    if (this.player.rewinding) {this.stopRewinding();}
+    this.isPaused = TAS.saveState["isPaused"];
+    //deal with camera
+    this.xCamX = TAS.saveState["xCamX"];
+    this.yCamY = TAS.saveState["yCamY"];
+    this.camera.yPos = TAS.saveState["cameraYPos"];
+    this.camera.xPos = TAS.saveState["cameraXPos"];
+    this.camera.camY = TAS.saveState["cameraCamY"];
+    this.camera.camX = TAS.saveState["cameraCamX"];
+    this.camera.target.x = TAS.saveState["cameraTargetX"];
+    this.camera.target.y = TAS.saveState["cameraTargetY"];
+    //deal with player
+    this.player.burningFlow = TAS.saveState["playerBurningFlow"];
+    this.player.flowPoints = TAS.saveState["playerFlowPoints"];
+    this.player.hitHalf = TAS.saveState["playerHitHalf"];
+    this.player.playerXMax = TAS.saveState["playerXMax"];
+    this.player.teleporting = TAS.saveState["playerTeleporting"];
+    this.player.xVel = TAS.saveState["playerXVel"];
+    this.player.yVel = TAS.saveState["playerYVel"];
+    this.player.xAcc = TAS.saveState["playerXAcc"];
+    this.player.x = TAS.saveState["playerX"];
+    this.player.y = TAS.saveState["playerY"];
+    this.player.yLove = TAS.saveState["playerYLove"];
+    this.player.playerJump = TAS.saveState["playerJump"];
+    this.player.jumpLevel = TAS.saveState["playerJumpLevel"];
+    this.player.curLevel.startPoint = TAS.saveState["playerStartPoint"];
+    this.skin.ping();
+    //deal with timer
+    this.timer.timerCounter = TAS.saveState["timerCounter"];
+    this.uiPanel.timeDisp.text = this.timer.getTimeAsString();
+    //deal with obstacles
+    this.level.swingingAxes.forEach((axe, i) => {
+      axe.axe.gotoAndStop(TAS.saveState["axeState"][i]);
+    });
+
+    this.level.popSpikes.forEach((ps, i) => {
+      ps.inside.gotoAndStop(TAS.saveState["popSpikeState"][i]);
+    });
+
+    this.level.fallingSpikes.forEach((fs, i) => {
+      fs.x = TAS.saveState["fallSpikeState"][i][0];
+      fs.y = TAS.saveState["fallSpikeState"][i][1];
+      fs.spikeIn.y = TAS.saveState["fallSpikeState"][i][2];
+      fs.smashState = TAS.saveState["fallSpikeState"][i][3];
+    });
+
+    this.level.laserCannons.forEach((lc, i) => {
+      lc.rotation = TAS.saveState["laserState"][i][0];
+      lc.setAngle = TAS.saveState["laserState"][i][1];
+      lc.fakeAngle = TAS.saveState["laserState"][i][2];
+      lc.timeOut = TAS.saveState["laserState"][i][3];
+      lc.beam.visible = TAS.saveState["laserState"][i][4];
+      lc.beam.height = TAS.saveState["laserState"][i][5];
+    });
+
+    this.uiPanel.ping(this.camera, this.player);
+    TAS.frameIndex = TAS.saveFrame;
+    TAS.stopRecord();
+    this.playback();
+    this.frozen = true;
+  }
+
+  public freezeObstacles() {
+    this.level.swingingAxes.forEach((axe) => {
+      axe.axe.stop();
+    })
+    this.level.popSpikes.forEach((ps) => {
+      ps.inside.stop();
+    });
+    this.frozen = true;
+  }
+
+  public unfreezeObstacles() {
+    this.level.swingingAxes.forEach((axe) => {
+      axe.axe.play();
+    })
+    this.level.popSpikes.forEach((ps) => {
+      ps.inside.play();
+    });
+    this.frozen = false;
+  }
+
+  public playback() {
+    this.inPlayback = true;
+    TAS.enterPlaybackMode();
+    this.skin.colour = 65280;
+    this.skin.ping();
   }
 
   public added(e: lib.flash.events.Event): any {
@@ -336,7 +470,6 @@ export class Game extends lib.flash.display.MovieClip {
   public createNewLevel(): any {
     this.levelFinished = false;
     this.tryFrame = 0;
-    this.checkPoints.splice(0, this.checkPoints.length);
     this.level.kill();
     this.removeChild(this.level);
     this.level = null;
@@ -445,6 +578,8 @@ export class Game extends lib.flash.display.MovieClip {
 
   public exitOut(e: lib.flash.events.MouseEvent = null): any {
     SoundBox.stopAllSounds();
+    TAS.stopRecord();
+    TAS.isSaved = false;
     if (this.mode === "SP") {
       this.playerObject.gameLevel = this.levelNum;
       if (this.levelNum != 0) {
@@ -472,6 +607,8 @@ export class Game extends lib.flash.display.MovieClip {
       this.addChild(this.fadeOut);
       this.fadeOut.x = 0 - this.x;
       this.fadeOut.y = 0 - this.y;
+      TAS.stopRecord();
+      TAS.exitPlaybackMode();
     } else if (this.mode === "MP") {
       this.uiPanel.arrowKeysToPan.gotoAndStop(2);
       this.xCamX = this.player.x;
@@ -668,16 +805,6 @@ export class Game extends lib.flash.display.MovieClip {
     }
   }
 
-  public hotKeys(): any {
-    if (Key.isDown(lib.flash.ui.Keyboard.SPACE)) {
-      if (!this.spaceDown) {
-        this.spaceDown = true;
-      }
-    } else {
-      this.spaceDown = false;
-    }
-  }
-
   public hub(e: Relay): any {
     switch (e.sender) {
       case "KILL":
@@ -718,7 +845,6 @@ export class Game extends lib.flash.display.MovieClip {
       this.levelNum = level;
     } else if (this.mode === "MP") {
       this.tubes = tuber;
-      this.updateMethod = 0;
       this.levelNum = level;
     } else if (this.mode === "PRACTICE") {
       this.timer.setTimeAsTotalSeconds(0);
@@ -864,6 +990,8 @@ export class Game extends lib.flash.display.MovieClip {
     this.skyLine.ping();
     this.uiPanel.ping(this.camera, this.player);
     this.level.setPlayer(this.player);
+    this.playback();
+    TAS.isSaved = false;
     this.goAhead = true;
   }
 
@@ -1036,12 +1164,15 @@ export class Game extends lib.flash.display.MovieClip {
 
   public pauseOut(e: lib.flash.events.MouseEvent = null): any {
     this.isPaused = !this.isPaused;
+    if (this.isPaused) {
+      this.dispatchEvent(new ExternalEvent({ type: "pause-start" }));
+    }
+    else {
+      this.dispatchEvent(new ExternalEvent({ type: "pause-end" }));
+    }
   }
 
   public ping(e: lib.flash.events.Event = null): any {
-    if (this.isPaused && this.mode === "SP") {
-      return;
-    }
     this.tryFrame++;
     if (this.mode === "MP") {
       this.tUpdateFriendsENT();
@@ -1063,6 +1194,74 @@ export class Game extends lib.flash.display.MovieClip {
       return;
     }
 
+    for (let i = 0; i < this.keyMap.length; i++) {
+      if (Key.isDown(this.keyMap[i]) && !this.isHeld[i]) {
+        this.isHeld[i] = true;
+        this.doThing[i] = true;
+      }
+      else if (!Key.isDown(this.keyMap[i]) && this.isHeld[i]) {
+        this.isHeld[i] = false;
+      }
+    }
+
+    if (this.doThing[0]) {
+      if (TAS.isPlaying) {TAS.stopPlaying();}
+      else {TAS.startPlaying();}
+      this.doThing[0] = false;
+    }
+
+    if (this.doThing[1]) {
+      if (TAS.isPlaying) {TAS.stopPlaying();}
+      else {TAS.advanceFrame();}
+      this.doThing[1] = false;
+    }
+
+    if (this.doThing[2]) {
+      if (!TAS.recordMode) {
+        if (TAS.isPlaying) {TAS.stopPlaying();}
+        TAS.primeRecord();
+        this.inPlayback = false;
+        this.skin.colour = 16711680;
+        this.skin.ping();
+      }
+      else {
+        TAS.stopRecord();
+        this.playback();
+      }
+      this.doThing[2] = false;
+    }
+
+    if (this.doThing[3]) {
+      this.makeSave();
+      this.doThing[3] = false;
+    }
+
+    if (this.doThing[4]) {
+      this.loadSave();
+      this.doThing[4] = false;
+    }
+
+    if (this.inPlayback && !TAS.playbackMode) {
+      this.skin.colour = this.player.colour;
+      this.skin.ping();
+    }
+
+    if (!TAS.canAdvance) {
+      if (!this.frozen) {
+        this.freezeObstacles();
+      }
+      return;
+    }
+    else {
+      if (this.frozen) {
+        this.unfreezeObstacles();
+      }
+    }
+
+    if (Key.isDown(lib.flash.ui.Keyboard.P)) {this.pauseOut();}
+
+    if (this.isPaused && this.mode == "SP") {return;}
+
     const isPressingKill = Key.isDown(lib.flash.ui.Keyboard.K);
     if (
       isPressingKill &&
@@ -1074,10 +1273,13 @@ export class Game extends lib.flash.display.MovieClip {
     this.isPressingKill = isPressingKill;
 
     if (!this.player.rewinding) {
+      if (TAS.recordMode) {Key.recordFrame();}
+      TAS.loadNextFrame();
       this.player.ping();
       this.skin.ping();
       this.logger.ping(this.skin);
-    } else {
+    }
+    else{
       this.rewind();
     }
     this.handleCamera();
@@ -1085,7 +1287,6 @@ export class Game extends lib.flash.display.MovieClip {
     this.uiPanel.ping(this.camera, this.player);
     this.emit.ping();
     this.ghosting.ping(this.tryFrame);
-    this.hotKeys();
     this.bg.ping();
     this.morgue.ping();
     if (!this.levelFinished) {
@@ -1121,11 +1322,6 @@ export class Game extends lib.flash.display.MovieClip {
           this.collectSign();
         }
       }
-    }
-
-    const isPressingPause = Key.isDown(lib.flash.ui.Keyboard.P);
-    if (isPressingPause && this.mode !== "SP") {
-      this.isPaused = !this.isPaused;
     }
   }
 
@@ -1431,6 +1627,11 @@ export class Game extends lib.flash.display.MovieClip {
     } else {
       this.uiPanel.levName.text = this.level.name;
     }
+    if (this.mode === "PRACTICE" || this.levelNum == 0) {
+      TAS.setFrame(0);
+    }
+    this.playback();
+    TAS.isSaved = false;
     this.updateUISign();
     this.reset();
     if (this.mode === "MP") {
@@ -1698,9 +1899,7 @@ export class Game extends lib.flash.display.MovieClip {
       }
     }
     this.updatePlayerPosition(position);
-    if (this.updateMethod == 1) {
-      for (i = 0; i < this.robots.length; i++) {}
-    }
+    
     this.handleYouArrows();
   }
 

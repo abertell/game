@@ -3,6 +3,7 @@ export { BitmapCanvas } from "./BitmapCanvas";
 export { Emit } from "./Emit";
 export { HandyCam } from "./HandyCam";
 export { Key } from "./Key";
+export { TAS } from "./TAS";
 export { Logger } from "./Logger";
 export { Math2 } from "./Math2";
 export { Relay } from "./Relay";

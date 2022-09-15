@@ -19,6 +19,7 @@ export class GameStore {
 
   isInSPMenu = false;
   isInModify = false;
+  isPaused = false;
 
   constructor(readonly root: RootStore) {
     makeAutoObservable(this);
@@ -107,6 +108,12 @@ export class GameStore {
 
   private handleExternalEvent(event: ExternalEventProps) {
     switch (event.type) {
+      case "pause-start":
+        this.isPaused = true;
+        break;
+      case "pause-end":
+        this.isPaused = false;
+        break;
       case "connect-multiplayer":
         this.root.modal.present({
           type: "connect-multiplayer",
@@ -168,7 +175,7 @@ export class GameStore {
         break;
 
       case "sp-menu-end":
-        this.isInSPMenu = false;
+        //this.isInSPMenu = false;
         break;
 
       case "modify-start":
