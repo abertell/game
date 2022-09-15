@@ -21,8 +21,6 @@ export class TAS {
 
     public static isSaved = false;
 
-    public static saveFrame: number = 0;
-
     public static inputs = [[0,0,0,0,0,0,0,0]];
 
     public static buffer: string = "";
@@ -32,7 +30,7 @@ export class TAS {
             if (frame[TAS.frameLength] == 4) {
                 TAS.inputs[i][TAS.frameLength] = 0;
             }
-            else if (frame[TAS.frameLength] == 2 && i !== TAS.saveFrame) {
+            else if (TAS.isSaved && frame[TAS.frameLength] == 2 && i !== TAS.saveState["saveFrame"]) {
                 TAS.inputs[i][TAS.frameLength] = 0;
             }
         });

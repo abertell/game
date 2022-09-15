@@ -219,7 +219,7 @@ export class Game extends lib.flash.display.MovieClip {
     this.frozen = false;
   }
 
-  public makeSave(saveTo) {
+  public makeSave(saveTo, isSaved) {
     if (!(TAS.recordMode || TAS.playbackMode)) {return;}
     if (this.player.rewinding) {return;}
     saveTo["isPaused"] = this.isPaused;
@@ -282,13 +282,13 @@ export class Game extends lib.flash.display.MovieClip {
     saveTo["laserState"] = lasers;
 
     TAS.cleanExtra();
-    TAS.saveFrame = TAS.frameIndex;
-    TAS.inputs[TAS.saveFrame][TAS.frameLength] = 2;
-    TAS.isSaved = true;
+    saveTo["saveFrame"] = TAS.frameIndex;
+    TAS.inputs[TAS.frameIndex][TAS.frameLength] = 2;
+    TAS.isSaved = isSaved;
   }
 
-  public loadSave(saveTo) {
-    if (!TAS.isSaved) {return;}
+  public loadSave(saveTo, isSaved) {
+    if (!isSaved) {return;}
     if (this.player.rewinding) {this.stopRewinding();}
     this.isPaused = saveTo["isPaused"];
     //deal with camera
@@ -345,7 +345,7 @@ export class Game extends lib.flash.display.MovieClip {
     });
 
     this.uiPanel.ping(this.camera, this.player);
-    TAS.frameIndex = TAS.saveFrame;
+    TAS.frameIndex = saveTo["saveFrame"];
     if (!TAS.recordMode) {this.playback();}
     TAS.stopPlaying();
     this.frozen = true;
@@ -1239,17 +1239,17 @@ export class Game extends lib.flash.display.MovieClip {
     }
 
     if (this.doThing[3]) {
-      this.makeSave(TAS.saveState);
+      this.makeSave(TAS.saveState, true);
       this.doThing[3] = false;
     }
 
     if (this.doThing[4]) {
-      this.loadSave(TAS.saveState);
+      this.loadSave(TAS.saveState, TAS.isSaved);
       this.doThing[4] = false;
     }
 
     if (this.doThing[5]) {
-      this.loadSave(TAS.saveStart);
+      this.loadSave(TAS.saveStart, true);
       this.doThing[5] = false;
     }
 
@@ -1650,8 +1650,7 @@ export class Game extends lib.flash.display.MovieClip {
     }
     if (TAS.frameIndex >= TAS.inputs.length-1) {this.record();}
     else {this.playback();}
-    this.makeSave(TAS.saveStart);
-    this.freezeObstacles();
+    this.makeSave(TAS.saveStart, false);
     this.updateUISign();
     this.reset();
     if (this.mode === "MP") {
@@ -1666,6 +1665,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.level.maxHeight < 225 ? 225 : this.level.maxHeight - 225,
     ];
     this.camera.move(this.player.x, this.player.y, false);
+    this.freezeObstacles();
   }
 
   public startPlayer(mc: lib.flash.display.MovieClip): any {
