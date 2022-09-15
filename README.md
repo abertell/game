@@ -26,10 +26,6 @@ There are 5 mod specific in-game key commands:
 * M - Make save state
 * L - Load save state
 
-Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading.
-
-This mod currently only supports one save state at a time, and save states are not remembered between stages (i.e. you cannot go back to a previous Singleplayer level without replaying from level 1, so it is best to optimize each level in order). Exiting the game will always reset you to Singleplayer level 1, to avoid confusion/inconsistent behavior.
-
 There are also 3 in-game modes, indicated by the color of your player:
 * Red - Recording mode
     * In this mode, all of your keyboard inputs will be recorded by the game, and will overwrite any existing inputs on the input log at the point you started recording.
@@ -37,6 +33,10 @@ There are also 3 in-game modes, indicated by the color of your player:
     * In this mode, the game will play out all recorded inputs on the input log. This mode can only be activated by entering a new level, or loading the save state.
 * Default (blue) - Freeplay mode
     * This mode occurs when you reach the end of the input log. Note that entering recording mode from this mode is not recommended, as it will start adding immediately to the end of the input log, without accounting for any changes in position/time since the log ended.
+
+Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading.
+
+This mod currently only supports one save state at a time, and save states are not remembered between stages (i.e. you cannot go back to a previous Singleplayer level without replaying from level 1, so it is best to optimize each level in order). Exiting the game will always reset you to Singleplayer level 1, to avoid confusion/inconsistent behavior.
 
 On the start of each stage, the game will be in playback mode (press R to record instead) and frozen (press 1 to unfreeze). Switching between modes will always freeze the game.
 
@@ -47,7 +47,7 @@ For example, the frame `[1,1,0,1,1,0,0,0]` would denote holding up, left, right,
 
 Note that the extra slot does not correspond to a key. It is equal to 2 on the frame of the most recent save state, and is equal to 3 on the frame of any level finish, which can be helpful for searching (Ctrl+F) when manually editing inputs in a text file. Note that if you overwrite the same log with many different save states/level finishes, every frame that ever had a save state/level finish will keep the extra entry, which may become confusing.
 
-The input log may be imported/exported at any time (including while in-game), but should always end with an empty frame `[0,0,0,0,0,0,0,0]`.
+The input log may be imported/exported at any time from the side panel (including while in-game), but should always end with an empty frame `[0,0,0,0,0,0,0,0]`.
 
 Known Issues/Inconveniences
 -----
