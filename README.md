@@ -21,7 +21,7 @@ This is a modded version of the html5 client of Exit Path, which supports TAS fu
 
 There are 5 mod specific in-game key commands:
 * 1 - Toggle freeze/unfreeze of the game (different from in-game pausing)
-* 2 - Advance game by one frame
+* 2 - Advance game by one frame while frozen
 * R - Toggle recording mode
 * M - Make save state
 * L - Load save state
