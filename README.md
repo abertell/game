@@ -38,7 +38,7 @@ Save states can only be made while in Recording or Playback mode. Loading a save
 
 This mod currently only supports one save state at a time, and save states are not remembered between stages (i.e. you cannot go back to a previous Singleplayer level without replaying from level 1, so it is best to optimize each level in order). Exiting the game will always reset you to Singleplayer level 1, to avoid confusion/inconsistent behavior.
 
-On the start of each stage, the game will be in playback mode (press R to record instead) and frozen (press 1 to unfreeze). Switching between modes will always freeze the game.
+On the start of each stage, the game will be in playback mode (press R to record instead) unless you are at the end of your input log, in which case it will record by default. Entering a new level, as well as switching between modes, will always freeze the game.
 
 Finally, the input log is a list of 8-length arrays, each representing a frame with the following key inputs (0 = released, 1 = held), in order:
 * `Up(W), Left(A), Down(S), Right(D), Flow(Space/Shift), P(ause), K(ill), extra`
