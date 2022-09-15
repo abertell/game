@@ -32,7 +32,7 @@ There are also 3 in-game modes, indicated by the color of your player:
 * Green - Playback mode
     * In this mode, the game will play out all recorded inputs on the input log, starting from the current frame.
 * Default (blue) - Freeplay mode
-    * This mode occurs when you reach the end of the input log. Note that entering recording mode from this mode is not recommended, as it will start adding immediately to the end of the input log, without accounting for any changes in position/time since the log ended.
+    * This mode occurs when you reach the end of the input log. Note that entering recording mode from here is not recommended, as you will immediately start adding to the end of the input log, without accounting for any changes in position/time since the log ended.
 
 Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading.
 
