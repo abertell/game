@@ -62,7 +62,7 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
     <div className={cn(className, styles.pane)}>
       <h2 className={styles.title}>Commands</h2>
       <button type="button" className={styles.action} onClick={onPractice}>
-        Practice Level
+        Practice Level (don't use in-game)
       </button>
       <button type="button" className={styles.action} onClick={onLoadInputs}>
         Import/Export Inputs
