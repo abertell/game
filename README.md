@@ -30,7 +30,7 @@ There are also 3 in-game modes, indicated by the color of your player:
 * Red - Recording mode
     * In this mode, all of your keyboard inputs will be recorded by the game, and will overwrite any existing inputs on the input log at the point you started recording.
 * Green - Playback mode
-    * In this mode, the game will play out all recorded inputs on the input log. This mode can only be activated by entering a new level, or loading the save state.
+    * In this mode, the game will play out all recorded inputs on the input log, starting from the current frame.
 * Default (blue) - Freeplay mode
     * This mode occurs when you reach the end of the input log. Note that entering recording mode from this mode is not recommended, as it will start adding immediately to the end of the input log, without accounting for any changes in position/time since the log ended.
 
