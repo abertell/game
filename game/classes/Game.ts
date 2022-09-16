@@ -348,6 +348,7 @@ export class Game extends lib.flash.display.MovieClip {
       lc.beam.height = saveTo["laserState"][i][5];
     });
 
+    this.displayStats();
     this.uiPanel.ping(this.camera, this.player);
     TAS.frameIndex = saveTo["saveFrame"];
     if (!TAS.recordMode) {this.playback();}
