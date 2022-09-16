@@ -1,6 +1,9 @@
 EP TAS Mod
 =======
 
+Online Build: http://54.37.137.55:13337/
+-----
+
 First-time setup
 -----
 
@@ -59,5 +62,9 @@ Known Issues/Inconveniences
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
 * Practice mode doesn't have traffic lights countdown (inconsistent with real multiplayer)
+* Flow "ghosts" don't disappear on loading save state
+* Hard to tell what mode you are in while flowing
+* Level background can be offset when loading save state
+* Occasionally inputs won't be registered after loading a save state and recording if you were holding them while loading
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
