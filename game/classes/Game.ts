@@ -387,6 +387,18 @@ export class Game extends lib.flash.display.MovieClip {
     this.skin.ping();
   }
 
+  public displayStats() {
+    this.uiPanel.levDisplay.text = (
+      "xVel " + this.player.xVel.toString()
+    + " yVel " + this.player.yVel.toString()
+    );
+    this.uiPanel.levName.text = (
+      "x " + this.player.x.toString()
+    + " y " + this.player.y.toString()
+    + " flow " + this.player.flowPoints.toString()
+    );
+  }
+
   public added(e: lib.flash.events.Event): any {
     this.stage.focus = this.stage;
   }
@@ -1296,6 +1308,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.player.ping();
       this.skin.ping();
       this.logger.ping(this.skin);
+      this.displayStats();
       if (TAS.recordMode || TAS.playbackMode) {TAS.loadNextFrame();}
     }
     else{
@@ -1668,6 +1681,7 @@ export class Game extends lib.flash.display.MovieClip {
     ];
     this.camera.move(this.player.x, this.player.y, false);
     this.freezeObstacles();
+    this.displayStats();
   }
 
   public startPlayer(mc: lib.flash.display.MovieClip): any {
