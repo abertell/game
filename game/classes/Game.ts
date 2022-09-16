@@ -248,6 +248,7 @@ export class Game extends lib.flash.display.MovieClip {
     saveTo["playerJumpLevel"] = this.player.jumpLevel;
     saveTo["playerStartPoint"] = this.player.curLevel.startPoint;
     saveTo["playerScaleY"] = this.player.scaleY;
+    saveTo["playerXF"] = this.player.xF;
     //deal with timer
     saveTo["timerCounter"] = this.timer.timerCounter;
     //deal with obstacles
@@ -317,6 +318,7 @@ export class Game extends lib.flash.display.MovieClip {
     this.player.jumpLevel = saveTo["playerJumpLevel"];
     this.player.curLevel.startPoint = saveTo["playerStartPoint"];
     this.player.scaleY = saveTo["playerScaleY"];
+    this.player.xF = saveTo["playerXF"];
     this.skin.ping();
     //deal with timer
     this.timer.timerCounter = saveTo["timerCounter"];
