@@ -58,14 +58,13 @@ The input log may be imported/exported at any time from the side panel (includin
 
 Known Issues/Inconveniences
 -----
-* Multiplayer does not work
+* Occasionally inputs won't be registered after loading a save state and recording if you were holding them while loading
+* Hard to tell what mode you are in while flowing
 * Modify panel cannot be used after Singleplayer panel is opened
+* Flow "ghosts" don't disappear on loading save state (can avoid by leaving game unfreezed for a second before loading)
 * Using "Practice Level" while in-game will cause a crash
 * Practice mode doesn't have traffic lights countdown (inconsistent with real multiplayer)
-* Flow "ghosts" don't disappear on loading save state
-* Hard to tell what mode you are in while flowing
+* Multiplayer does not work
 * Level background can be offset when loading save state
-* Occasionally inputs won't be registered after loading a save state and recording if you were holding them while loading
-* Hard to see velocity/coords in stadium levels
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
