@@ -66,5 +66,6 @@ Known Issues/Inconveniences
 * Hard to tell what mode you are in while flowing
 * Level background can be offset when loading save state
 * Occasionally inputs won't be registered after loading a save state and recording if you were holding them while loading
+* Hard to see velocity/coords in stadium levels
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
