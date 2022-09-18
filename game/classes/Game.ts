@@ -1666,7 +1666,6 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.mode === "PRACTICE" || this.levelNum == 0) {
       TAS.setFrame(0);
     }
-    this.makeSave(TAS.saveStart, false);
     this.updateUISign();
     this.reset();
     if (this.mode === "MP") {
@@ -1689,6 +1688,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.playback();
       TAS.startPlaying();
     }
+    this.makeSave(TAS.saveStart, false);
     this.displayStats();
   }
 
