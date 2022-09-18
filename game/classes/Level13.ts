@@ -14,8 +14,8 @@ export class Level13 extends Level {
   }
 
   public preInitCheck(): any {
-    this.levelColour = 0;
-    this.obstacleColour = 0;
+    //this.levelColour = 0;
+    //this.obstacleColour = 0;
     this.repaint();
   }
 

@@ -1164,7 +1164,7 @@ export class Game extends lib.flash.display.MovieClip {
     } else if (this.levelNum == 10) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 14) {
-      this.skyLine.gotoAndStop(2);
+      this.skyLine.gotoAndStop(5);
     } else if (this.levelNum <= 16) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 19) {
@@ -1666,8 +1666,6 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.mode === "PRACTICE" || this.levelNum == 0) {
       TAS.setFrame(0);
     }
-    if (TAS.frameIndex >= TAS.inputs.length-1) {this.record();}
-    else {this.playback();}
     this.makeSave(TAS.saveStart, false);
     this.updateUISign();
     this.reset();
@@ -1683,7 +1681,14 @@ export class Game extends lib.flash.display.MovieClip {
       this.level.maxHeight < 225 ? 225 : this.level.maxHeight - 225,
     ];
     this.camera.move(this.player.x, this.player.y, false);
-    this.freezeObstacles();
+    if (TAS.frameIndex >= TAS.inputs.length-1) {
+      this.record();
+      this.freezeObstacles();
+    }
+    else {
+      this.playback();
+      TAS.startPlaying();
+    }
     this.displayStats();
   }
 
