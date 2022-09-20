@@ -108,7 +108,8 @@ export class Level extends lib.flash.display.MovieClip {
     this.tMaxX = 100;
     this.tMaxY = 50;
     this.levelName = "Multiplayer";
-    this.obstacleColour = 13421772;
+    //this.obstacleColour = 13421772;
+    this.obstacleColour = 16711680;
     this.createdArray = false;
     //this.levelColour = 3355443;
     this.levelColour = 10944767;
