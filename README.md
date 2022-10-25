@@ -22,13 +22,15 @@ Usage
 -----
 This is a modded version of the HTML5 client of Exit Path by @kiootic, which supports TAS functionality on Singleplayer and Practice modes.
 
-There are 6 mod specific in-game key commands:
+There are 8 mod specific in-game key commands:
 * 1 - Toggle freeze/unfreeze of the game (different from in-game pausing)
 * 2 - Advance game by one frame while frozen
 * R - Toggle recording mode
 * M - Make save state
 * L - Load save state
 * B - Restart level
+* Z - Move player 0.05 pixels left
+* X - Move player 0.05 pixels right
 
 There are also 3 in-game modes, indicated by the color of your player:
 * Red - Recording mode
