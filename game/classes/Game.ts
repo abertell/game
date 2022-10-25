@@ -205,16 +205,18 @@ export class Game extends lib.flash.display.MovieClip {
     this.tCounterGoal = 7;
     this.finalPlacingArray = new Array<any>();
     this.playerSkins = new Array<any>();
-    this.isHeld = new Array<Boolean>(false, false, false, false, false, false);
+    this.isHeld = new Array<Boolean>(false, false, false, false, false, false, false, false);
     this.keyMap = new Array<any>(
       lib.flash.ui.Keyboard.NUMBER_1,
       lib.flash.ui.Keyboard.NUMBER_2,
       lib.flash.ui.Keyboard.R,
       lib.flash.ui.Keyboard.M,
       lib.flash.ui.Keyboard.L,
-      lib.flash.ui.Keyboard.B
+      lib.flash.ui.Keyboard.B,
+      lib.flash.ui.Keyboard.Z,
+      lib.flash.ui.Keyboard.X
     );
-    this.doThing = new Array<Boolean>(false, false, false, false, false, false);
+    this.doThing = new Array<Boolean>(false, false, false, false, false, false, false, false);
     this.inPlayback = false;
     this.frozen = false;
   }
@@ -249,6 +251,7 @@ export class Game extends lib.flash.display.MovieClip {
     saveTo["playerStartPoint"] = this.player.curLevel.startPoint;
     saveTo["playerScaleY"] = this.player.scaleY;
     saveTo["playerXF"] = this.player.xF;
+    saveTo["playerHoldUp"] = this.player.holdUp;
     //deal with timer
     saveTo["timerCounter"] = this.timer.timerCounter;
     //deal with obstacles
@@ -319,6 +322,7 @@ export class Game extends lib.flash.display.MovieClip {
     this.player.curLevel.startPoint = saveTo["playerStartPoint"];
     this.player.scaleY = saveTo["playerScaleY"];
     this.player.xF = saveTo["playerXF"];
+    this.player.holdUp = saveTo["playerHoldUp"];
     this.skin.ping();
     //deal with timer
     this.timer.timerCounter = saveTo["timerCounter"];
@@ -391,11 +395,11 @@ export class Game extends lib.flash.display.MovieClip {
   }
 
   public displayStats() {
-    this.uiPanel.levDisplay.text = (
+    this.uiPanel.levName.text = (
       "xVel " + this.player.xVel.toString()
     + " yVel " + this.player.yVel.toString()
     );
-    this.uiPanel.levName.text = (
+    this.uiPanel.levDisplay.text = (
       "x " + this.player.x.toString()
     + " y " + this.player.y.toString()
     + " flow " + this.player.flowPoints.toString()
@@ -1268,6 +1272,20 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.doThing[5]) {
       this.loadSave(TAS.saveStart, true);
       this.doThing[5] = false;
+    }
+
+    if (this.doThing[6]) {
+      this.player.x -= 0.04;
+      this.skin.ping();
+      this.displayStats();
+      this.doThing[6] = false;
+    }
+
+    if (this.doThing[7]) {
+      this.player.x += 0.06;
+      this.skin.ping();
+      this.displayStats();
+      this.doThing[7] = false;
     }
 
     if (this.inPlayback && !TAS.playbackMode) {
