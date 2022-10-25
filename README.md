@@ -58,10 +58,9 @@ The input log may be imported/exported at any time from the side panel (includin
 
 Known Issues/Inconveniences
 -----
-* Occasionally inputs won't be registered after loading a save state and recording if you were holding them while loading
-* Hard to tell what mode you are in while flowing
+* Hard to tell what mode you are in while flowing (campaign only)
 * Modify panel cannot be used after Singleplayer panel is opened
-* Flow "ghosts" don't disappear on loading save state (can avoid by leaving game unfreezed for a second before loading)
+* Flow "ghosts" don't disappear on loading save state (campaign only) (can avoid by leaving game unfreezed for a second before loading)
 * Using "Practice Level" while in-game will cause a crash
 * Practice mode doesn't have traffic lights countdown (inconsistent with real multiplayer)
 * Multiplayer does not work
