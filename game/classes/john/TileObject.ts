@@ -2,6 +2,7 @@ import lib from "swf-lib";
 import { Level } from "../Level";
 import { Tile } from "../Tile";
 import { Math2 } from "./Math2";
+import { TAS } from "./TAS";
 
 export class TileObject extends lib.flash.display.MovieClip {
   public declare bl: Tile;
@@ -787,6 +788,9 @@ export class TileObject extends lib.flash.display.MovieClip {
       if ((this.guyTM && this.guyTL) || (this.guyTM && this.guyTR)) {
         this.jumpLevel = true;
       }
+    }
+    if (dir == 0) {
+      TAS.testvar = this.guyBL.toString() + " " + this.guyTL.toString() + " " + this.guyBR.toString() + " " + this.guyTR.toString() + " " + toH.toString();
     }
     switch (dir) {
       case 0:

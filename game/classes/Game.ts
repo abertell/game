@@ -395,14 +395,30 @@ export class Game extends lib.flash.display.MovieClip {
   }
 
   public displayStats() {
-    this.uiPanel.levName.text = (
-      "xVel " + this.player.xVel.toString()
-    + " yVel " + this.player.yVel.toString()
-    );
+    let no = "[ ]";
+    let yes = "[.]";
+    let pressw = no;
+    let pressa = no;
+    let presss = no;
+    let pressd = no;
+    let pressflow = no;
+    if (TAS.inputs[TAS.frameIndex][0]) pressw = yes;
+    if (TAS.inputs[TAS.frameIndex][1]) pressa = yes;
+    if (TAS.inputs[TAS.frameIndex][2]) presss = yes;
+    if (TAS.inputs[TAS.frameIndex][3]) pressd = yes;
+    if (TAS.inputs[TAS.frameIndex][4]) pressflow = yes;
     this.uiPanel.levDisplay.text = (
       "x " + this.player.x.toString()
     + " y " + this.player.y.toString()
     + " flow " + this.player.flowPoints.toString()
+    + "        "
+    + "          " + pressw + "  `"
+    );
+    this.uiPanel.levName.text = (
+      "xVel " + this.player.xVel.toString()
+    + " yVel " + this.player.yVel.toString()
+    + "         "
+    + pressflow + "   " + pressa + presss + pressd
     );
   }
 

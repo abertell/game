@@ -1,5 +1,3 @@
-import { Key } from "./Key";
-
 export class TAS {
     public constructor() {}
 
@@ -24,6 +22,8 @@ export class TAS {
     public static inputs = [[0,0,0,0,0,0,0,0]];
 
     public static buffer: string = "";
+
+    public static testvar: string = "";
 
     public static cleanExtra() {
         TAS.inputs.forEach((frame, i) => {
