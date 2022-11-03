@@ -361,6 +361,8 @@ export class Game extends lib.flash.display.MovieClip {
     if (!TAS.recordMode) {this.playback();}
     TAS.stopPlaying();
     this.frozen = true;
+    this.bg.ping();
+    this.skyLine.ping();
   }
 
   public freezeObstacles() {
