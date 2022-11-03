@@ -118,7 +118,7 @@ export class UIPanel extends lib.flash.display.MovieClip {
           this.flow.flowReady.visible == false &&
           flowMode !== LevelFlags.FlowAlways
         ) {
-          this.flow.flowReady.visible = true;
+          //this.flow.flowReady.visible = true;
           this.flow.flowReady.gotoAndPlay(2);
           SoundBox.playSound("FlowReady");
         }

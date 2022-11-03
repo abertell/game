@@ -31,11 +31,11 @@ export class startBox_308 extends lib.flash.display.MovieClip {
       return;
     }
     this.frameCounter++;
-    if (this.frameCounter == 60) {
+    if (this.frameCounter == 30 * 4) {
       this.gotoAndPlay(20);
-    } else if (this.frameCounter == 75) {
+    } else if (this.frameCounter == 30 * 5) {
       this.gotoAndPlay(36);
-    } else if (this.frameCounter == 90) {
+    } else if (this.frameCounter == 30 * 6) {
       this.gotoAndPlay(55);
       this.removeEventListener(lib.flash.events.Event.ENTER_FRAME, this.ping);
     }

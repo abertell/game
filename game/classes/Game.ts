@@ -164,6 +164,8 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare frozen;
 
+  public declare justStarted;
+
   private isPressingKill = false;
 
   public constructor() {
@@ -219,6 +221,7 @@ export class Game extends lib.flash.display.MovieClip {
     this.doThing = new Array<Boolean>(false, false, false, false, false, false, false, false);
     this.inPlayback = false;
     this.frozen = false;
+    this.justStarted = false;
   }
 
   public makeSave(saveTo, isSaved) {
@@ -500,7 +503,19 @@ export class Game extends lib.flash.display.MovieClip {
   }
 
   public countDownFinish(): any {
-    this.goAhead = true;
+    this.pauseOut();
+    this.timer.timerCounter = 0;
+    TAS.setFrame(0);
+    if (TAS.frameIndex >= TAS.inputs.length-1) {
+      this.record();
+      this.freezeObstacles();
+    }
+    else {
+      this.playback();
+      TAS.startPlaying();
+    }
+    this.makeSave(TAS.saveStart, false);
+    this.justStarted = true;
   }
 
   public countdownStart(): any {
@@ -1037,9 +1052,13 @@ export class Game extends lib.flash.display.MovieClip {
     this.skyLine.ping();
     this.uiPanel.ping(this.camera, this.player);
     this.level.setPlayer(this.player);
-    this.playback();
-    TAS.isSaved = false;
+    this.player.x = this.level.startPoint.x + 17.5;
+    this.player.y = this.level.startPoint.y;
     this.goAhead = true;
+    this.record();
+    TAS.startPlaying();
+    this.pauseOut();
+    TAS.isSaved = false;
   }
 
   public initSounds(): any {
@@ -1241,6 +1260,12 @@ export class Game extends lib.flash.display.MovieClip {
       return;
     }
 
+    if (this.justStarted) {
+      this.loadSave(TAS.saveStart, true);
+      this.justStarted = false;
+      return;
+    }
+
     for (let i = 0; i < this.keyMap.length; i++) {
       if (Key.isDown(this.keyMap[i]) && !this.isHeld[i]) {
         this.isHeld[i] = true;
@@ -1314,13 +1339,6 @@ export class Game extends lib.flash.display.MovieClip {
       if (!this.frozen) {
         this.freezeObstacles();
       }
-      if (this.levelNum != 30) {
-        this.uiPanel.timeDisp.text = this.timer.getTimeAsString();
-      } else {
-        this.uiPanel.timeDisp.text = " ";
-      }
-      this.level.timeString = this.timer.getTimeAsString();
-      this.uiPanel.ping(this.camera, this.player);
       return;
     }
 
@@ -1697,7 +1715,7 @@ export class Game extends lib.flash.display.MovieClip {
     } else {
       this.uiPanel.levName.text = this.level.name;
     }
-    if (this.mode === "PRACTICE" || this.levelNum == 0) {
+    if (this.levelNum == 0) {
       TAS.setFrame(0);
     }
     this.updateUISign();
@@ -1714,16 +1732,17 @@ export class Game extends lib.flash.display.MovieClip {
       this.level.maxHeight < 225 ? 225 : this.level.maxHeight - 225,
     ];
     this.camera.move(this.player.x, this.player.y, false);
-    if (TAS.frameIndex >= TAS.inputs.length-1) {
-      this.record();
-      this.freezeObstacles();
+    if (this.mode === "SP") {
+      if (TAS.frameIndex >= TAS.inputs.length-1) {
+        this.record();
+        this.freezeObstacles();
+      }
+      else {
+        this.playback();
+        TAS.startPlaying();
+      }
+      this.makeSave(TAS.saveStart, false);
     }
-    else {
-      this.playback();
-      TAS.startPlaying();
-    }
-    this.makeSave(TAS.saveStart, false);
-    this.displayStats();
   }
 
   public startPlayer(mc: lib.flash.display.MovieClip): any {
