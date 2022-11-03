@@ -64,8 +64,6 @@ Known Issues/Inconveniences
 * Modify panel cannot be used after Singleplayer panel is opened
 * Flow "ghosts" don't disappear on loading save state (campaign only) (can avoid by leaving game unfreezed for a second before loading)
 * Using "Practice Level" while in-game will cause a crash
-* Practice mode doesn't have traffic lights countdown (inconsistent with real multiplayer)
 * Multiplayer does not work
-* Level background can be offset when loading save state
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
