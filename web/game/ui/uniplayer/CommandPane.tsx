@@ -69,6 +69,14 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
         Import/Export Inputs
       </button>
       <br></br>
+      &nbsp;&nbsp;&nbsp;IMPORTANT: Wait 6 seconds on practice
+      <br></br>
+      &nbsp;&nbsp;&nbsp;(for countdown), then press B.
+      <br></br>
+      &nbsp;&nbsp;&nbsp;Countdown may be offscreen!
+      <br></br>
+      &nbsp;
+      <br></br>
       &nbsp;&nbsp;&nbsp;Frame key order:
       <br></br>
       &nbsp;&nbsp;&nbsp;[W, A, S, D, Flow, P, K, extra]
@@ -104,6 +112,10 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
       &nbsp;&nbsp;&nbsp;L - Load save state
       <br></br>
       &nbsp;&nbsp;&nbsp;B - Load level start
+      <br></br>
+      &nbsp;&nbsp;&nbsp;Z - Move 0.05 pixels left
+      <br></br>
+      &nbsp;&nbsp;&nbsp;B - Move 0.05 pixels right
     </div>
   );
 });
