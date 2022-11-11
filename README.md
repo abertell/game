@@ -42,7 +42,7 @@ There are also 3 in-game modes, indicated by the color of your player:
 
 Save states can only be made while in Recording or Playback mode. Loading a save state will keep you in whatever mode you were in before loading (besides freeplay). This mod currently only supports one most recent save state, plus a default save state at the start of every stage (via B key).
 
-On the start of each stage, the game will be in playback mode (press R to record instead) unless you are at the end of your input log, in which case it will record by default. Entering a new level, as well as switching between modes, will always freeze the game.
+On the start of each stage, (NEW) there will be a 6 second countdown, which emulates the real countdown in multiplayer. Afterwards, press B once to make sure the frame is set to 0. The game will be in playback mode (press R to record instead) unless you are at the end of your input log, in which case it will record by default. Entering a new level, as well as switching between modes, will always freeze the game.
 
 Finally, the input log is a list of 8-length arrays, each representing a frame with the following key inputs (0 = released, 1 = held), in order:
 * `Up(W), Left(A), Down(S), Right(D), Flow(Space/Shift), P(ause), K(ill), extra`
