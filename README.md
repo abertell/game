@@ -1,4 +1,4 @@
-EP TAS Mod
+Exit Path TAS Mod
 =======
 
 Online Build: http://54.37.137.55:13337/
@@ -60,6 +60,7 @@ The input log may be imported/exported at any time from the side panel (includin
 
 Known Issues/Inconveniences
 -----
+* (WILL FIX) Bouncer behavior is buggy when advancing frame by frame, due to the bouncer animation resetting.
 * Hard to tell what mode you are in while flowing (campaign only)
 * Modify panel cannot be used after Singleplayer panel is opened
 * Flow "ghosts" don't disappear on loading save state (campaign only) (can avoid by leaving game unfreezed for a second before loading)
