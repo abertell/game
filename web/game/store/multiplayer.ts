@@ -57,7 +57,6 @@ export class MultiplayerStore {
       { name: "connectionLost" }
     );
 
-    /*
     reaction(
       () =>
         this.room && this.room.id !== "lobby"
@@ -70,7 +69,6 @@ export class MultiplayerStore {
       },
       { name: "clearMessages" }
     );
-    */
   }
 
   private requestAccessToken = async () => {

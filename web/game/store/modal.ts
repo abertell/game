@@ -8,6 +8,7 @@ type ModalInstanceProps =
   | ModalConnectMultiplayerProps
   | ModalRoomSelectionProps
   | ModalWhatsNewProps
+  | ModalKeybindingsProps
   | ModalImportCodeProps;
 
 type ModalSelectLevelProps = {
@@ -27,6 +28,10 @@ type ModalRoomSelectionProps = {
 type ModalWhatsNewProps = {
   type: "whats-new";
   newVersions: Record<string, string[]>;
+};
+
+type ModalKeybindingsProps = {
+  type: "keybindings";
 };
 
 type ModalImportCodeProps = {

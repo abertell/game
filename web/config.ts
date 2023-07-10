@@ -6,6 +6,10 @@ export interface MPServer {
 export const mpServers: MPServer[] = [
   {
     name: "Primary server",
+    address: "https://exit-path.fly.dev",
+  },
+  {
+    name: "Secondary server",
     address: "https://exit-path.kiootic.xyz",
   },
 ];
@@ -47,4 +51,12 @@ export const versions: string[][] = [
   ],
   ["v0.3.6", "Add menu command for restarting level"],
   ["v0.3.7", "Disable in-game commands for spectators"],
+  ["v0.4.0", "Press 'B' to toggle player beam"],
+  [
+    "v0.5.0",
+    "Use reduced rendering for treadmills and checkpoints if quality is lowered",
+  ],
+  ["v0.5.1", "Use reduced visual effects if quality is lowered"],
+  ["v0.6.0", "Add new trigger blocks (@klementc)"],
+  ["v0.7.0", "Add configuration for keybindings"],
 ];

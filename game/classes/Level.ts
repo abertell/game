@@ -22,6 +22,7 @@ import { Grinder } from "./Grinder";
 import { Plate } from "./Plate";
 import { Teleporter } from "./Teleporter";
 import { LevelFlags } from "../../shared/level";
+import { TriggerBlock } from "./TriggerBlock";
 
 export class Level extends lib.flash.display.MovieClip {
   public declare bouncers: Bouncer[];
@@ -41,6 +42,8 @@ export class Level extends lib.flash.display.MovieClip {
   public declare grinders: Grinder[];
 
   public declare halfTiles: Tile[];
+
+  public treadmills: Tile[] = [];
 
   public declare laserCannons: LaserCannon[];
 
@@ -64,6 +67,8 @@ export class Level extends lib.flash.display.MovieClip {
 
   public declare maxHeight: number;
 
+  public declare minHeight: number;
+
   public declare obstacleColour: number;
 
   public declare plates: Plate[];
@@ -84,6 +89,8 @@ export class Level extends lib.flash.display.MovieClip {
 
   public declare tiles: Tile[];
 
+  public declare triggers: TriggerBlock[];
+
   public declare timeRank: string;
 
   public declare timeString: string;
@@ -100,11 +107,14 @@ export class Level extends lib.flash.display.MovieClip {
 
   public lockCamY = true;
 
+  public colorBG: number;
+
   public constructor() {
     super();
   }
 
   __preInit() {
+    this.minHeight = 10000000;
     this.tMaxX = 100;
     this.tMaxY = 50;
     this.levelName = "Multiplayer";
@@ -136,6 +146,7 @@ export class Level extends lib.flash.display.MovieClip {
     this.fallingSpikes = new Array();
     this.grinders = new Array();
     this.bouncers = new Array();
+    this.triggers = new Array();
     this.laserCannons = new Array();
     this.checkPoints = new Array();
     super.__preInit();
@@ -151,8 +162,11 @@ export class Level extends lib.flash.display.MovieClip {
     this.checkPoints.push(checkPoint);
   }
 
-  public applyObstacleColour(mov: lib.flash.display.MovieClip): any {
-    Anim.colourMe(mov, this.obstacleColour);
+  public applyObstacleColour(
+    mov: lib.flash.display.MovieClip,
+    color: number = this.obstacleColour
+  ): any {
+    Anim.colourMe(mov, color);
   }
 
   public createArray(): any {
@@ -166,6 +180,56 @@ export class Level extends lib.flash.display.MovieClip {
     }
     this.canvas.init(3000, 3000);
     this.addChild(this.canvas);
+  }
+
+  public createTrigger(mov: TriggerBlock) {
+    this.triggers.push(mov);
+    this.addChild(mov);
+    if (mov.name.includes("DEL") && mov.name.includes("1")) {
+      mov.color = 0xffff0000;
+      //this.toPush.push([mov, 0]);
+      if (mov.name.includes("SDEL")) {
+        mov.addText();
+        mov.name = mov.name.slice(1);
+      }
+    } else if (mov.name.includes("DEL") && mov.name.includes("2")) {
+      mov.color = 0xffffff00;
+      if (mov.name.includes("SDEL")) {
+        mov.addText();
+        mov.name = mov.name.slice(1);
+      }
+    } else if (mov.name.includes("INF")) {
+      mov.color = 0xff0000ff;
+    } else if (mov.name.includes("NRM")) {
+      mov.color = 0xff0080ff;
+    } else if (mov.name.includes("NOF")) {
+      mov.color = 0xff00ffff;
+    } else if (mov.name.includes("SHW") && mov.name.includes("2")) {
+      mov.color = 0x00000000;
+      if (mov.name.includes("SSHW")) {
+        mov.addText();
+        mov.name = mov.name.slice(1);
+      }
+    } else if (mov.name.includes("SHW") && mov.name.includes("1")) {
+      mov.color = 0xffff0000;
+      if (mov.name.includes("SSHW")) {
+        mov.addText();
+        mov.name = mov.name.slice(1);
+      }
+    } else if (mov.name.includes("SKN")) {
+      mov.addText();
+    } else if (mov.name.includes("BEM")) {
+      mov.color = 0xff9932cc;
+    } else if (mov.name.includes("POP")) {
+      mov.color = 0x00000000;
+    } else if (mov.name.includes("STF")) {
+      mov.color = 0xffff66ff;
+    } else if (mov.name.includes("JMP")) {
+      mov.color = 0xff4d4d4d;
+    } else if (mov.name.includes("GRV")) {
+      mov.color = 0xffefc997;
+    }
+    this.applyObstacleColour(mov, mov.color);
   }
 
   public createBouncer(mov: Bouncer) {
@@ -278,11 +342,11 @@ export class Level extends lib.flash.display.MovieClip {
     const pendingTiles: Tile[] = [];
     for (const [holder, tileType] of this.toPush) {
       let tile: Tile;
-      //if (this.levelType == "SP") {
-      tile = new Tile();
-      //} else {
-      //  tile = new TileOpaque();
-      //}
+      if (this.levelType == "SP") {
+        tile = new Tile();
+      } else {
+        tile = new TileOpaque();
+      }
 
       if (holder.rotation % 90 === 0 && holder.rotation !== 0) {
         holder.addChild(tile);
@@ -302,6 +366,9 @@ export class Level extends lib.flash.display.MovieClip {
       if (tile.y > this.maxHeight) {
         this.maxHeight = tile.y;
       }
+      if (tile.y < this.minHeight) {
+        this.minHeight = tile.y;
+      }
       tile.typeOf = tileType;
       if (tile.typeOf === 3) {
         this.halfTiles.push(tile);
@@ -315,9 +382,9 @@ export class Level extends lib.flash.display.MovieClip {
 
       pendingTiles.push(tile);
       if (tileType != 4) {
-        //if (this.levelType == "SP") {
-        Anim.colourMe(tile, this.levelColour);
-        //}
+        if (this.levelType == "SP") {
+          Anim.colourMe(tile, this.levelColour);
+        }
       }
       switch (tileType) {
         case 1:
@@ -339,6 +406,11 @@ export class Level extends lib.flash.display.MovieClip {
 
         case 4:
           this.endPoint = tile;
+          break;
+
+        case 5:
+        case 6:
+          this.treadmills.push(tile);
           break;
       }
     }
@@ -362,6 +434,12 @@ export class Level extends lib.flash.display.MovieClip {
     for (let i = 0; i < this.teleporters.length; i++) {
       this.teleporters[i].init();
     }
+    for (const treadmill of this.treadmills) {
+      treadmill.pingTreadmill();
+    }
+    for (const trigger of this.triggers) {
+      trigger.init();
+    }
     this.uniqueLevelInit();
   }
 
@@ -374,7 +452,16 @@ export class Level extends lib.flash.display.MovieClip {
     this.canvas.kill();
   }
 
-  public ping(): any {}
+  public ping(): any {
+    for (const cp of this.checkPoints) {
+      for (const flag of cp.checkPointFlags) {
+        flag.ping();
+      }
+    }
+    for (const treadmill of this.treadmills) {
+      treadmill.pingTreadmill();
+    }
+  }
 
   public preInitCheck(): any {}
 

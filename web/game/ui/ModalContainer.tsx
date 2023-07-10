@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../game/store";
 import { ModalInstance } from "../../game/store/modal";
 import { ConnectMultiplayer } from "./modals/ConnectMultiplayer";
+import { Keybindings } from "./modals/Keybindings";
 import { RoomSelection } from "./modals/RoomSelection";
 import { SelectLevel } from "./modals/SelectLevel";
 import { WhatsNew } from "./modals/WhatsNew";
@@ -63,6 +64,11 @@ const Instance = observer<InstanceProps>(function Instance(props) {
           modalId={props.modal.id}
           newVersions={props.modal.newVersions}
         />
+      );
+      break;
+    case "keybindings":
+      children = (
+        <Keybindings className={styles.dialog} modalId={props.modal.id} />
       );
       break;
     case "import-code":

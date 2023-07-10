@@ -45,7 +45,6 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
     if (modal.instances.some((i) => i.id === modalId)) {
       return;
     }
-    TAS.cleanExtra();
     TAS.inputsToString();
 
     setModalId(
@@ -63,7 +62,7 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
     <div className={cn(className, styles.pane)}>
       <h2 className={styles.title}>Commands</h2>
       <button type="button" className={styles.action} onClick={onPractice}>
-        Practice Level (don't use in-game)
+        Practice Level
       </button>
       <button type="button" className={styles.action} onClick={onLoadInputs}>
         Import/Export Inputs
@@ -115,7 +114,7 @@ export const CommandPane = observer<CommandPaneProps>(function CommandPane(
       <br></br>
       &nbsp;&nbsp;&nbsp;Z - Move 0.05 pixels left
       <br></br>
-      &nbsp;&nbsp;&nbsp;B - Move 0.05 pixels right
+      &nbsp;&nbsp;&nbsp;X - Move 0.05 pixels right
     </div>
   );
 });

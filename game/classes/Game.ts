@@ -6,6 +6,7 @@ import { Level } from "./Level";
 import { Emit } from "./john/Emit";
 import { EndCountdown } from "./EndCountdown";
 import { FadeOut } from "./FadeOut";
+import { FreedomSequence } from "./FreedomSequence";
 import { Ghosting } from "./Ghosting";
 import { LevelEnd } from "./LevelEnd";
 import { LevelStart } from "./LevelStart";
@@ -20,15 +21,15 @@ import { UIPanel } from "./UIPanel";
 import { InsideA } from "./InsideA";
 import { InsideC } from "./InsideC";
 import { InsideB } from "./InsideB";
-import { Runner } from "./Runner";
+import { Beam, Runner } from "./Runner";
 import { SoundBox } from "./john/SoundBox";
 import { AchEvent } from "./AchEvent";
 import { StartBeam } from "./StartBeam";
 import { Anim } from "./john/Anim";
 import { PlayerBar } from "./PlayerBar";
 import { Relay } from "./john/Relay";
-import { Key } from "./john/Key";
 import { TAS } from "./john/TAS";
+import { Key } from "./john/Key";
 import { Math2 } from "./john/Math2";
 import { WhiteSquare } from "./WhiteSquare";
 import { YouArrow } from "./YouArrow";
@@ -52,7 +53,21 @@ import { ExternalEvent } from "./ExternalEvent";
 export class Game extends lib.flash.display.MovieClip {
   public declare bg: BitmapCanvas;
 
+  public declare buildStr: string;
+
   private declare camera: HandyCam;
+
+  public declare cDown: boolean;
+
+  public declare checkPoints: any[];
+
+  public declare cheerCounter: number;
+
+  public declare cLeft: boolean;
+
+  public declare cRight: boolean;
+
+  public declare cUp: boolean;
 
   private declare curLevel: Level;
 
@@ -70,11 +85,15 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare firstSoundPlay: boolean;
 
+  public declare freedomSequence: FreedomSequence;
+
   private declare ghosting: Ghosting;
 
   public declare goAhead: boolean;
 
   public declare isPaused: boolean;
+
+  public declare keysPressed: any[];
 
   public declare level: Level;
 
@@ -94,6 +113,8 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare mpLevel: number;
 
+  private declare placingBonuses: any[];
+
   public declare player: Player;
 
   public declare playerBars: PlayerBar[];
@@ -106,6 +127,8 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare rewindCounter: number;
 
+  public declare robots: any[];
+
   public declare sBackward: lib.flash.media.Sound;
 
   public declare sFast: lib.flash.media.Sound;
@@ -114,7 +137,7 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare mode: "SP" | "MP" | "PRACTICE";
 
-  private declare skin: Runner;
+  public declare skin: Runner;
 
   public declare skinLayer: lib.flash.display.MovieClip;
 
@@ -130,6 +153,8 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare soundRatio: number;
 
+  private declare spaceDown: boolean;
+
   private declare static: Static;
 
   public declare tConnected: boolean;
@@ -140,6 +165,8 @@ export class Game extends lib.flash.display.MovieClip {
 
   public declare tempShape: lib.flash.display.Shape;
 
+  public declare timeCounter: number;
+
   public declare timer: StopWatch;
 
   private declare tryFrame: number;
@@ -148,12 +175,18 @@ export class Game extends lib.flash.display.MovieClip {
 
   private declare uiPanel: UIPanel;
 
+  public declare updateMethod: number;
+
+  public declare updateRate: number;
+
+  public declare updaters: any[];
+
   public declare xCamX: number;
 
   public declare yCamY: number;
 
   public declare youArrows: any[];
-  
+
   public declare keyMap;
 
   public declare isHeld;
@@ -168,43 +201,60 @@ export class Game extends lib.flash.display.MovieClip {
 
   private isPressingKill = false;
 
+  readonly beam = new Beam();
+
   public constructor() {
     super();
     this.xCamX = 375;
     this.yCamY = 375;
+    this.updateMethod = 0;
+    this.cLeft = false;
     this.fastSound = false;
     this.tCounter = 0;
     this.levelFinished = false;
     this.firstSoundPlay = true;
+    this.cUp = false;
+    this.updateRate = 7;
     this.mode = "PRACTICE";
     this.songPlaying = "none";
     this.levelNum = 0;
     this.tryFrame = 0;
     this.deathScreens = 0;
+    this.cRight = false;
     this.level30Okay = false;
+    this.timeCounter = 0;
     this.mpLevel = 100;
+    this.cDown = false;
     this.goAhead = false;
     this.rewindCounter = 0;
+    this.spaceDown = false;
+    this.buildStr = "0.2.3";
+    this.cheerCounter = 0;
     this.isPaused = false;
     this.tConnected = false;
     this.camera = new HandyCam();
     this.logger = new Logger();
     this.ghosting = new Ghosting();
+    this.placingBonuses = new Array<any>(250, 150, 100, 50);
     this.bg = new BitmapCanvas();
     this.skinLayer = new lib.flash.display.MovieClip();
     this.morgue = new Morgue();
     this.uiPanel = new UIPanel();
     this.timer = new StopWatch();
     this.emit = new Emit();
+    this.robots = new Array<any>();
     this.tempShape = new lib.flash.display.Shape();
     this.playerBars = new Array<any>();
+    this.checkPoints = new Array<any>();
     this.youArrows = new Array<any>();
     this.skyLine = new SkyLine();
     this.sForward = new InsideA();
     this.sBackward = new InsideC();
     this.sFast = new InsideB();
     this.players = new Array<any>();
-    this.tCounterGoal = 7;
+    this.tCounterGoal = this.updateRate;
+    this.keysPressed = new Array<any>(false, false, false, false);
+    this.updaters = new Array<any>(0, 0, 0, 0, 0, 0, 0, 0);
     this.finalPlacingArray = new Array<any>();
     this.playerSkins = new Array<any>();
     this.isHeld = new Array<Boolean>(false, false, false, false, false, false, false, false);
@@ -222,6 +272,7 @@ export class Game extends lib.flash.display.MovieClip {
     this.inPlayback = false;
     this.frozen = false;
     this.justStarted = false;
+    this.beam.visible = false;
   }
 
   public makeSave(saveTo, isSaved) {
@@ -289,6 +340,30 @@ export class Game extends lib.flash.display.MovieClip {
     });
     saveTo["laserState"] = lasers;
 
+    let bouncers = new Array<number>();
+    this.level.bouncers.forEach((bouncer) => {
+      bouncers.push(bouncer.currentFrame);
+    });
+    saveTo["bouncerState"] = bouncers;
+
+    //deal with trigger blocks
+    let triggers = new Array<Array<any>>();
+    this.level.triggers.forEach((trigger) => {
+      let pop = -1;
+      if (trigger.typeTrigger.includes("POP")) pop = trigger.frameCount;
+      triggers.push([
+        pop,
+        trigger.effectOn,
+        trigger.activatedSHW,
+        trigger.triggered,
+        trigger.color,
+        trigger.name
+      ]);
+      saveTo["triggerState"] = triggers;
+    });
+    saveTo["flowMode"] = main().multiplayer.game.level.flags;
+
+    //other
     TAS.cleanExtra();
     saveTo["saveFrame"] = TAS.frameIndex;
     TAS.inputs[TAS.frameIndex][TAS.frameLength] = 2;
@@ -355,6 +430,25 @@ export class Game extends lib.flash.display.MovieClip {
       lc.beam.height = saveTo["laserState"][i][5];
     });
 
+    this.level.bouncers.forEach((bouncer, i) => {
+      bouncer.gotoAndStop(saveTo["bouncerState"][i]);
+    });
+
+    //deal with trigger blocks
+    this.level.triggers.forEach((trigger, i) => {
+      if (trigger.typeTrigger.includes("POP")) {
+        trigger.frameCount = saveTo["triggerState"][i][0];
+      }
+      trigger.effectOn = saveTo["triggerState"][i][1];
+      trigger.activatedSHW = saveTo["triggerState"][i][2];
+      trigger.triggered = saveTo["triggerState"][i][3];
+      trigger.color = saveTo["triggerState"][i][4];
+      this.level.applyObstacleColour(trigger,saveTo["triggerState"][i][4]);
+      trigger.name = saveTo["triggerState"][i][5];
+    });
+    main().multiplayer.game.level.flags = saveTo["flowMode"];
+
+    //other
     this.displayStats();
     this.uiPanel.ping(this.camera, this.player);
     TAS.frameIndex = saveTo["saveFrame"];
@@ -372,6 +466,9 @@ export class Game extends lib.flash.display.MovieClip {
     this.level.popSpikes.forEach((ps) => {
       ps.inside.stop();
     });
+    this.level.bouncers.forEach((bouncer) => {
+      bouncer.gotoAndStop(bouncer.currentFrame);
+    });
     this.frozen = true;
   }
 
@@ -381,6 +478,9 @@ export class Game extends lib.flash.display.MovieClip {
     })
     this.level.popSpikes.forEach((ps) => {
       ps.inside.play();
+    });
+    this.level.bouncers.forEach((bouncer) => {
+      if (bouncer.currentFrame != 1) bouncer.gotoAndPlay(bouncer.currentFrame);
     });
     this.frozen = false;
   }
@@ -525,13 +625,15 @@ export class Game extends lib.flash.display.MovieClip {
     this.levelStart.gotoAndPlay(1);
     this.addChild(this.levelStart);
     if (this.uiPanel && this.contains(this.uiPanel)) {
-      this.levelStart.startBox.levelName.nameOf.text = this.uiPanel.levName.text;
+      this.levelStart.startBox.levelName.nameOf.text =
+        this.uiPanel.levName.text;
     }
   }
 
   public createNewLevel(): any {
     this.levelFinished = false;
     this.tryFrame = 0;
+    this.checkPoints.splice(0, this.checkPoints.length);
     this.level.kill();
     this.removeChild(this.level);
     this.level = null;
@@ -608,6 +710,8 @@ export class Game extends lib.flash.display.MovieClip {
       this.finalPlacingArray.push(playerBar);
       tempArray.splice(remI, 1);
     }
+
+    this.dispatchEvent(new ExternalEvent({ type: "mp-game-end" }));
   }
 
   public endEnding(): any {
@@ -740,7 +844,9 @@ export class Game extends lib.flash.display.MovieClip {
             true
           )
         );
-        this.bg.drawMovieClip(this.skin, 1, 2, 3, tempTrans);
+        if (this.stage.quality === "HIGH") {
+          this.bg.drawMovieClip(this.skin, 1, 2, 3, tempTrans);
+        }
       } else {
         this.camera.ping(this.player.x, this.player.y);
         this.skin.filters = new Array<any>();
@@ -869,6 +975,16 @@ export class Game extends lib.flash.display.MovieClip {
     }
   }
 
+  public hotKeys(): any {
+    if (Key.isDown(lib.flash.ui.Keyboard.SPACE)) {
+      if (!this.spaceDown) {
+        this.spaceDown = true;
+      }
+    } else {
+      this.spaceDown = false;
+    }
+  }
+
   public hub(e: Relay): any {
     switch (e.sender) {
       case "KILL":
@@ -909,6 +1025,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.levelNum = level;
     } else if (this.mode === "MP") {
       this.tubes = tuber;
+      this.updateMethod = 0;
       this.levelNum = level;
     } else if (this.mode === "PRACTICE") {
       this.timer.setTimeAsTotalSeconds(0);
@@ -1047,6 +1164,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.skin.visible = false;
       this.finishLevel();
     }
+    this.dispatchEvent(new ExternalEvent({ type: "mp-game-init" }));
   }
 
   public initPractice() {
@@ -1080,7 +1198,9 @@ export class Game extends lib.flash.display.MovieClip {
       this.dispatchEvent(new AchEvent(AchEvent.SEND, 14));
     }
     this.deathScreens = 0;
-    this.morgue.addDeadBody(this.player, this.player.colour);
+    if (this.stage.quality === "HIGH") {
+      this.morgue.addDeadBody(this.player, this.player.colour);
+    }
     this.player.flowPoints = 0;
     this.player.burningFlow = false;
     this.skin.filters = new Array<any>();
@@ -1201,11 +1321,11 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.levelNum <= 2) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 9) {
-      this.skyLine.gotoAndStop(2);
+      this.skyLine.gotoAndStop(3);
     } else if (this.levelNum == 10) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 14) {
-      this.skyLine.gotoAndStop(5);
+      this.skyLine.gotoAndStop(4);
     } else if (this.levelNum <= 16) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 19) {
@@ -1228,19 +1348,17 @@ export class Game extends lib.flash.display.MovieClip {
     this.addChild(this.morgue);
     this.addChild(this.uiPanel);
     this.addChild(this.emit);
+    this.addChild(this.beam);
   }
 
   public pauseOut(e: lib.flash.events.MouseEvent = null): any {
     this.isPaused = !this.isPaused;
-    if (this.isPaused) {
-      this.dispatchEvent(new ExternalEvent({ type: "pause-start" }));
-    }
-    else {
-      this.dispatchEvent(new ExternalEvent({ type: "pause-end" }));
-    }
   }
 
   public ping(e: lib.flash.events.Event = null): any {
+    if (this.level.colorBG != null) {
+      Anim.colourMe(this.skyLine, this.level.colorBG);
+    }
     this.tryFrame++;
     if (this.mode === "MP") {
       this.tUpdateFriendsENT();
@@ -1350,7 +1468,9 @@ export class Game extends lib.flash.display.MovieClip {
 
     if (this.isPaused && this.mode == "SP") {return;}
 
-    const isPressingKill = Key.isDown(lib.flash.ui.Keyboard.K);
+    const isPressingKill = Key.isDown(
+      lib.flash.ui.Keyboard.codeMap[main().keybindings.kill]
+    );
     if (
       isPressingKill &&
       !this.isPressingKill &&
@@ -1367,8 +1487,7 @@ export class Game extends lib.flash.display.MovieClip {
       this.logger.ping(this.skin);
       this.displayStats();
       if (TAS.recordMode || TAS.playbackMode) {TAS.loadNextFrame();}
-    }
-    else{
+    } else {
       this.rewind();
     }
     this.handleCamera();
@@ -1376,7 +1495,13 @@ export class Game extends lib.flash.display.MovieClip {
     this.uiPanel.ping(this.camera, this.player);
     this.emit.ping();
     this.ghosting.ping(this.tryFrame);
-    this.bg.ping();
+    this.hotKeys();
+    if (this.stage.quality === "HIGH") {
+      this.bg.visible = true;
+      this.bg.ping();
+    } else {
+      this.bg.visible = false;
+    }
     this.morgue.ping();
     if (!this.levelFinished) {
       if (this.levelNum != 30) {
@@ -1389,11 +1514,11 @@ export class Game extends lib.flash.display.MovieClip {
       this.uiPanel.timeDisp.text = " ";
     }
     this.level.timeString = this.timer.getTimeAsString();
-    
     if (this.levelNum == 30) {
       this.setRank();
     }
     this.level.setPlayer(this.player);
+    this.level.ping();
     this.level.uniqueLevelPing();
     this.skyLine.ping();
     this.handleCheering();
@@ -1413,6 +1538,21 @@ export class Game extends lib.flash.display.MovieClip {
         }
       }
     }
+
+    const isPressingPause = Key.isDown(
+      lib.flash.ui.Keyboard.codeMap[main().keybindings.pause]
+    );
+    if (isPressingPause && this.mode !== "SP") {
+      this.isPaused = !this.isPaused;
+    }
+
+    this.beam.x = this.skin.x;
+    this.beam.y = this.skin.y;
+    this.beam.visible = Beam.isVisible;
+    const transform = new lib.flash.geom.ColorTransform();
+    transform.alphaMultiplier = 0.5;
+    transform.color = this.skin.colour;
+    this.beam.transform.colorTransform = transform;
   }
 
   public qualityOut(e: lib.flash.events.MouseEvent = null): any {
@@ -1458,9 +1598,11 @@ export class Game extends lib.flash.display.MovieClip {
       if (!flagForRewind && this.skin.hitTestObject(this.level.startPoint)) {
         flagForRewind = true;
       }
-      colourTransform = new lib.flash.geom.ColorTransform();
-      colourTransform.alphaMultiplier = 0.2;
-      this.bg.drawMovieClip(this.skin, 1, 2, 3, colourTransform, "normal");
+      if (this.stage.quality === "HIGH") {
+        colourTransform = new lib.flash.geom.ColorTransform();
+        colourTransform.alphaMultiplier = 0.2;
+        this.bg.drawMovieClip(this.skin, 1, 2, 3, colourTransform, "normal");
+      }
     }
     if (flagForRewind) {
       this.stopRewinding();
@@ -1998,7 +2140,9 @@ export class Game extends lib.flash.display.MovieClip {
       }
     }
     this.updatePlayerPosition(position);
-    
+    if (this.updateMethod == 1) {
+      for (i = 0; i < this.robots.length; i++) {}
+    }
     this.handleYouArrows();
   }
 

@@ -19,7 +19,7 @@ export class GameStore {
 
   isInSPMenu = false;
   isInModify = false;
-  isPaused = false;
+  numCheckpoints: number | null = null;
 
   constructor(readonly root: RootStore) {
     makeAutoObservable(this);
@@ -58,6 +58,7 @@ export class GameStore {
 
     stage.__withContext(() => {
       const main: MainTimeline = library.instantiateCharacter(0);
+      main.keybindings = this.root.keybindings;
       main.addEventListener(ExternalEvent.TYPE, (e: ExternalEvent) =>
         this.handleExternalEvent(e.props)
       );
@@ -108,12 +109,6 @@ export class GameStore {
 
   private handleExternalEvent(event: ExternalEventProps) {
     switch (event.type) {
-      case "pause-start":
-        this.isPaused = true;
-        break;
-      case "pause-end":
-        this.isPaused = false;
-        break;
       case "connect-multiplayer":
         this.root.modal.present({
           type: "connect-multiplayer",
@@ -184,6 +179,15 @@ export class GameStore {
 
       case "modify-end":
         this.isInModify = false;
+        break;
+
+      case "mp-game-init":
+        this.numCheckpoints =
+          this.main?.multiplayer?.game?.level?.checkPoints?.length ?? 0;
+        break;
+
+      case "mp-game-end":
+        this.numCheckpoints = null;
         break;
     }
   }
