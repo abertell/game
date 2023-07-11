@@ -47,7 +47,7 @@ export const Game: React.FC<GameProps> = observer(function Game(props) {
           setIsFocusMode((v) => !v);
         }
         if (e.nativeEvent.code === root.keybindings.beam) {
-          //Beam.isVisible = !Beam.isVisible;
+          Beam.isVisible = false;
         }
       }
     },
