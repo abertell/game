@@ -38,6 +38,7 @@ export class TAS {
     }
 
     public static inputsToString() {
+        TAS.cleanExtra();
         let output = new Array<string>();
         TAS.inputs.forEach(function (frame) {
             output.push("["+frame.toString()+"]");

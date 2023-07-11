@@ -1321,11 +1321,11 @@ export class Game extends lib.flash.display.MovieClip {
     if (this.levelNum <= 2) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 9) {
-      this.skyLine.gotoAndStop(3);
+      this.skyLine.gotoAndStop(2);
     } else if (this.levelNum == 10) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 14) {
-      this.skyLine.gotoAndStop(4);
+      this.skyLine.gotoAndStop(5);
     } else if (this.levelNum <= 16) {
       this.skyLine.gotoAndStop(2);
     } else if (this.levelNum <= 19) {
