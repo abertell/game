@@ -62,9 +62,9 @@ Known Inconveniences
 -----
 * Hard to tell what mode you are in while flowing (campaign only)
 * Modify panel cannot be used after Singleplayer panel is opened
-* Flow "ghosts" don't disappear on loading save state (campaign only) (can avoid by leaving game unfreezed for a second before loading)
 * Using "Practice Level" while in-game will cause a crash
 * Multiplayer does not work
 * Player beam is disabled
+* Exporting log on a save frame will cause the extra "2" to no longer be stored
 
 Any feature/fix requests will be low priority, unless they significantly impact the ability to use the tool.
