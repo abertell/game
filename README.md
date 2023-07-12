@@ -60,6 +60,7 @@ The input log may be imported/exported at any time from the side panel (includin
 
 Known Inconveniences
 -----
+* Checkpoints do not work properly after loading a save state
 * Hard to tell what mode you are in while flowing (campaign only)
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
