@@ -1,7 +1,7 @@
 Exit Path TAS Mod
 =======
 
-Online Build: http://54.37.137.55:13337/
+Online Build: http://tas.exitpath-maker.net/
 -----
 
 First-time setup
