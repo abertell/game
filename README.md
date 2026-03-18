@@ -62,7 +62,6 @@ Known Inconveniences
 -----
 * Custom level obstacle cycles are actually offset by one frame
 * Checkpoints do not work properly after loading a save state
-* The finish/rewind on same frame bug behaves differently than vanilla (campaign only)
 * Hard to tell what mode you are in while flowing (campaign only)
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
