@@ -1455,6 +1455,8 @@ export class Game extends lib.flash.display.MovieClip {
       this.skin.ping();
     }
 
+    if (this.player.rewinding) {this.rewind();}
+    
     if (!TAS.canAdvance) {
       if (!this.frozen) {
         this.freezeObstacles();
@@ -1487,8 +1489,6 @@ export class Game extends lib.flash.display.MovieClip {
       this.logger.ping(this.skin);
       this.displayStats();
       if (TAS.recordMode || TAS.playbackMode) {TAS.loadNextFrame();}
-    } else {
-      this.rewind();
     }
     this.handleCamera();
     this.handleLaserCannons();
