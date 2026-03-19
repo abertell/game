@@ -1172,7 +1172,11 @@ export class Game extends lib.flash.display.MovieClip {
     this.skyLine.ping();
     this.uiPanel.ping(this.camera, this.player);
     this.level.setPlayer(this.player);
-    this.player.x = this.level.startPoint.x + 17.5;
+    if (this.levelNum < 31) {
+      this.player.x = this.level.startPoint.x + 12.5;
+      this.player.flowPoints = 400;
+    }
+    else {this.player.x = this.level.startPoint.x + 17.5;}
     this.player.y = this.level.startPoint.y;
     this.goAhead = true;
     this.record();
