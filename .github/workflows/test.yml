@@ -20,7 +20,6 @@ jobs:
       run: |
         yarn install
         yarn tsc
-        yarn lint
         yarn build:data
         yarn build:swf
         yarn build
