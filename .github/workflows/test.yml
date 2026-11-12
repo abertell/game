@@ -1,0 +1,33 @@
+name: test
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "12"
+        registry-url: 'https://npm.pkg.github.com/'
+    - name: build
+      run: |
+        yarn install --frozen-lockfile
+        yarn format:check
+        yarn tsc
+        yarn lint
+        yarn build:data
+        yarn build:swf
+        yarn build
+    - uses: JamesIves/github-pages-deploy-action@3.6.2
+      with:
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+        repository-name: exit-path-tas/exit-path-tas.github.io
+        branch: gh-pages
+        folder: dist
