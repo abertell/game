@@ -57,6 +57,7 @@
     "eslint-plugin-simple-import-sort": "5.0.3",
     "html-webpack-plugin": "5.5.0",
     "mini-css-extract-plugin": "2.7.2",
+    "minimatch": "10.2.6",
     "postcss": "8.4.20",
     "postcss-loader": "7.0.2",
     "postcss-preset-env": "6.7.0",
