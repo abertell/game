@@ -141,7 +141,8 @@ export class Player extends TileObject {
       var trigger = this.curLevel.triggers[i];
       /* check all pop triggers for pop on/off */
       if (trigger.typeTrigger.includes("POP")) {
-        if (!Game.frozen) trigger.popCheck(this.curLevel);
+        const game = this.parent as Game;
+        if (!game.frozen) trigger.popCheck(this.curLevel);
       }
       if (this.hitTestObject(trigger)) {
         /* Change flow mode flow mode */
