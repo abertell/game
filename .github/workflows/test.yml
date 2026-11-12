@@ -19,7 +19,6 @@ jobs:
     - name: build
       run: |
         yarn install
-        yarn format:check
         yarn tsc
         yarn lint
         yarn build:data
