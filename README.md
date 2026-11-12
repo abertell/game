@@ -1,7 +1,7 @@
 Exit Path TAS Mod
 =======
 
-Online Build: http://tas.exitpath-maker.net/
+Online Build: https://exit-path-tas.github.io/
 -----
 
 First-time setup
@@ -62,6 +62,7 @@ Known Inconveniences
 -----
 * Custom level obstacle cycles are actually offset by one frame
 * Checkpoints do not work properly after loading a save state
+* Custom levels allow the player to jump on the first frame (not possible normally)
 * Hard to tell what mode you are in while flowing (campaign only)
 * Modify panel cannot be used after Singleplayer panel is opened
 * Using "Practice Level" while in-game will cause a crash
