@@ -25,7 +25,7 @@ jobs:
         yarn build
     - uses: JamesIves/github-pages-deploy-action@3.6.2
       with:
-        SSH: ${{ secrets.DEPLOY_KEY }}
+        TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         REPOSITORY_NAME: exit-path-tas/exit-path-tas.github.io
         BRANCH: gh-pages
         FOLDER: dist
