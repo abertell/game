@@ -18,7 +18,7 @@ jobs:
         registry-url: 'https://npm.pkg.github.com/'
     - name: build
       run: |
-        yarn install --frozen-lockfile
+        yarn install
         yarn format:check
         yarn tsc
         yarn lint
